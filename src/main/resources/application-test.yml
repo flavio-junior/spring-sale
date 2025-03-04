@@ -1,0 +1,22 @@
+s3:
+  bucket: ${BUCKET_NAME_GUIDE_POINT_TEST:empty}
+  region: ${BUCKET_REGION_GUIDE_POINT_TEST:empty}
+server:
+  port : 8002
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/db_spring_sale?useTimezone=true&serverTimezone=America/Sao_Paulo
+    username: postgres
+    password: postgres
+  mail:
+    host: ${EMAIL_HOST_GUIDE_POINT:smtp.gmail.com}
+    port: ${EMAIL_PORT_GUIDE_POINT:587}
+    username: ${ACCOUNT_USERNAME_GUIDE_POINT_TEST}
+    password: ${ACCOUNT_PASSWORD_GUIDE_POINT_TEST}
+  jpa:
+    hibernate:
+      ddl-auto: none
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    show-sql: true
