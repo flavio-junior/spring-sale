@@ -9,7 +9,7 @@ email:
 security:
   jwt:
     token:
-      secret-key: ${SECRET-KEY:53cr37}
+      secret-key: 53cr37
       expire-length: ${EXPIRE_TOKEN_TIME:86400000}
 spring:
   application:

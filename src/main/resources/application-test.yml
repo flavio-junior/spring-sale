@@ -2,7 +2,7 @@ s3:
   bucket: ${BUCKET_NAME_GUIDE_POINT_TEST:empty}
   region: ${BUCKET_REGION_GUIDE_POINT_TEST:empty}
 server:
-  port : 8002
+  port: 8002
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver

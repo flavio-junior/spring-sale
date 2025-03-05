@@ -5,8 +5,8 @@ import br.com.spring.sale.entity.user.User
 import br.com.spring.sale.exceptions.OperationUnauthorizedException
 import br.com.spring.sale.repository.CompanyRepository
 import br.com.spring.sale.utils.common.TypeAccount
-import br.com.spring.sale.vo.company.CompanyResponseVO
 import br.com.spring.sale.utils.others.ConverterUtils.parseObject
+import br.com.spring.sale.vo.company.CompanyResponseVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

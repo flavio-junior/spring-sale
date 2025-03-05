@@ -4,7 +4,6 @@ import br.com.spring.sale.security.JwtTokenFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -59,21 +58,10 @@ class SecurityConfig {
                         "/v3/api-docs/**",
                         "/swagger-ui/**"
                     ).permitAll()
-                    .requestMatchers("/api/digital/order/companies/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/profile/v1/**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/employees/v1/**").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.GET, "/api/digital/order/categories/v1**").hasRole("USER")
-                    .requestMatchers("/api/digital/order/categories/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/foods/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/items/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/orders/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/products/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/reservations/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/shopping/cart/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/payment/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/digital/order/report/v1**").hasRole("ADMIN")
-                    .requestMatchers("/api/settings/v1**").authenticated()
-                    .anyRequest().authenticated()
+                    .requestMatchers("api/spring/sale/use/settings/v1**").authenticated()
+                    .requestMatchers("/api/spring/sale/categories/v1/**").authenticated()
+                    .requestMatchers("/api/spring/sale/products/v1/**").authenticated()
+                    //.anyRequest().authenticated()
             }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
             .cors { _: CorsConfigurer<HttpSecurity?>? -> }
