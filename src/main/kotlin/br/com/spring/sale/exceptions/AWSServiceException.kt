@@ -1,4 +1,4 @@
-package br.com.digital.order.exceptions
+package br.com.spring.sale.exceptions
 
 import com.amazonaws.AmazonServiceException
 import org.springframework.http.HttpStatus

@@ -31,12 +31,16 @@ class SecurityConfig {
     }
 
     @Bean
-    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
+    fun authenticationManager(
+        authenticationConfiguration: AuthenticationConfiguration
+    ): AuthenticationManager {
         return authenticationConfiguration.authenticationManager
     }
 
     @Bean
-    fun securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
+    fun securityFilterChain(
+        httpSecurity: HttpSecurity
+    ): SecurityFilterChain {
         return httpSecurity
             .httpBasic { basic: HttpBasicConfigurer<HttpSecurity> -> basic.disable() }
             .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
@@ -58,10 +62,12 @@ class SecurityConfig {
                         "/v3/api-docs/**",
                         "/swagger-ui/**"
                     ).permitAll()
-                    .requestMatchers("api/spring/sale/use/settings/v1**").authenticated()
-                    .requestMatchers("/api/spring/sale/categories/v1/**").authenticated()
-                    .requestMatchers("/api/spring/sale/products/v1/**").authenticated()
-                    //.anyRequest().authenticated()
+                    .requestMatchers("/api/spring/sale/categories/v1/**").hasRole("ADMIN")
+                    .requestMatchers("/api/spring/sale/products/v1/**").hasRole("ADMIN")
+                    .requestMatchers("/api/spring/sale/companies/v1/**").hasRole("ADMIN")
+                    .requestMatchers("/api/spring/sale/employees/v1/**").hasRole("ADMIN")
+                    .requestMatchers("/api/spring/sale/use/settings/v1/**").authenticated()
+                    .anyRequest().authenticated()
             }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
             .cors { _: CorsConfigurer<HttpSecurity?>? -> }

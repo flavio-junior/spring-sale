@@ -1,6 +1,6 @@
 package br.com.spring.sale.service
 
-import br.com.digital.order.exceptions.AWSServiceException
+import br.com.spring.sale.exceptions.AWSServiceException
 import br.com.spring.sale.exceptions.AWSClientException
 import br.com.spring.sale.exceptions.IllegalArgumentCustomException
 import br.com.spring.sale.exceptions.ResourceNotFoundException

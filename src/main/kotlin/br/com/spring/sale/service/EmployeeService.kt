@@ -67,26 +67,6 @@ class EmployeeService {
         return parseListObjects(employees, EmployeeResponseVO::class.java)
     }
 
-    @Transactional(readOnly = true)
-    fun checkEmployeeAlreadyExists(
-        user: User,
-        employeeName: String? = null,
-        saveAuthor: () -> Unit = {}
-    ) {
-        if (employeeName != null) {
-            val companySaved = companyService.getCompanyByUserLogged(user = user)
-            val employeeSaved: Employee? =
-                employeeRepository.checkEmployeeAlreadyExists(companyId = companySaved.id, name = employeeName)
-            return if (employeeSaved != null) {
-                saveAuthor()
-            } else {
-                throw ResourceNotFoundException(EMPLOYEE_NOT_FOUND)
-            }
-        } else {
-            saveAuthor()
-        }
-    }
-
     fun getEmployee(
         user: User,
         employeeId: Long

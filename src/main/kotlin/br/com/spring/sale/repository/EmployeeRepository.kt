@@ -40,12 +40,6 @@ interface EmployeeRepository : JpaRepository<Employee, Long> {
         @Param("name") name: String?
     ): List<Employee>
 
-    @Query(value = "SELECT e FROM Employee e WHERE e.company.id = :companyId AND e.name = :name")
-    fun checkEmployeeAlreadyExists(
-        @Param("companyId") companyId: Long? = null,
-        @Param("name") name: String?
-    ): Employee?
-
     @Modifying
     @Query("UPDATE Employee e SET e.status =:status WHERE e.id = :employeeId")
     fun changeStatusEmployee(
