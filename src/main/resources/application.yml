@@ -1,0 +1,21 @@
+email:
+  password-recover:
+    token:
+      minutes: ${PASSWORD_RECOVER_TOKEN_MINUTES:5}
+    uri: ${PASSWORD_RECOVER_URI:http://localhost:5173/recover-password/}
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expire-length: ${EXPIRE_TOKEN_TIME:86400000}
+spring:
+  application:
+    name: Spring Sale
+  jackson:
+    time-zone: ${TIME_ZONE}
+  profiles:
+    active: ${APP_PROFILE:test}
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE:200MB}
+      max-request-size: ${MAX_FILE_SIZE:200MB}

@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:17
+    container_name: container_db_spring_sale
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db_spring_sale
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    networks:
+      - spring-sale-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  pg-admin:
+    image: dpage/pgadmin4
+    container_name: container_pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: flaviojunior.work@gmail.com
+      PGADMIN_DEFAULT_USER: jr
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - 5050:80
+    expose:
+      - 5050
+    depends_on:
+      - db
+    networks:
+      - spring-sale-network
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin/data
+
+volumes:
+  postgres-data:
+  pgadmin-data:
+
+networks:
+  spring-sale-network:
+    driver: bridge
