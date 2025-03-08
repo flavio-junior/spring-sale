@@ -1,6 +1,6 @@
 aws:
-  access_key_id: ${AWS_ACCESS_KEY_GUIDE_POINT:empty}
-  secret_access_key: ${AWS_SECRET_KEY_GUIDE_POINT:empty}
+  access_key_id: ${AWS_ACCESS_KEY_SPRING_SALE:empty}
+  secret_access_key: ${AWS_SECRET_KEY_SPRING_SALE:empty}
 email:
   password-recover:
     token:

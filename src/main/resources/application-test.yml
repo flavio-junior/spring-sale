@@ -1,6 +1,6 @@
 s3:
-  bucket: ${BUCKET_NAME_GUIDE_POINT_TEST:empty}
-  region: ${BUCKET_REGION_GUIDE_POINT_TEST:empty}
+  bucket: ${BUCKET_NAME_SPRING_SALE_TEST:empty}
+  region: ${BUCKET_REGION_SPRING_SALE_TEST:empty}
 server:
   port: 8002
 spring:
@@ -10,10 +10,10 @@ spring:
     username: postgres
     password: postgres
   mail:
-    host: ${EMAIL_HOST_GUIDE_POINT:smtp.gmail.com}
-    port: ${EMAIL_PORT_GUIDE_POINT:587}
-    username: ${ACCOUNT_USERNAME_GUIDE_POINT_TEST}
-    password: ${ACCOUNT_PASSWORD_GUIDE_POINT_TEST}
+    host: ${EMAIL_HOST_SPRING_SALE:smtp.gmail.com}
+    port: ${EMAIL_PORT_SPRING_SALE:587}
+    username: ${ACCOUNT_USERNAME_SPRING_SALE_TEST}
+    password: ${ACCOUNT_PASSWORD_SPRING_SALE_TEST}
   jpa:
     hibernate:
       ddl-auto: none

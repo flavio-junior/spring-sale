@@ -31,33 +31,34 @@
         <java-jwt.version>4.4.0</java-jwt.version>
         <javax.xml.bind.version>2.3.1</javax.xml.bind.version>
         <kotlin.version>1.9.25</kotlin.version>
-        <springframework.boot.version>3.3.5</springframework.boot.version>
+        <auth0.version>4.5.0</auth0.version>
+        <springframework.version>3.4.3</springframework.version>
+        <postgresql.version>42.7.5</postgresql.version>
+        <flyway.core.version>10.21.0</flyway.core.version>
         <modelmapper.version>3.0.0</modelmapper.version>
-        <postgresql.version>42.7.4</postgresql.version>
-        <flywaydb.version>10.21.0</flywaydb.version>
         <amazonaws.version>1.12.765</amazonaws.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${springframework.boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>${springframework.boot.version}</version>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${auth0.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <version>${springframework.boot.version}</version>
+            <version>${springframework.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>${java-jwt.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${springframework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -67,23 +68,22 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>${flywaydb.version}</version>
+            <version>${flyway.core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-            <version>${flywaydb.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-            <version>${springframework.boot.version}</version>
+            <version>${flyway.core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${amazonaws.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
@@ -101,11 +101,6 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>${javax.xml.bind.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>${amazonaws.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -150,11 +145,11 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>${flywaydb.version}</version>
+                <version>${flyway.core.version}</version>
                 <configuration>
-                    <url>jdbc:postgresql://localhost/db_spring_sale</url>
-                    <user>postgres</user>
-                    <password>postgres</password>
+                    <url>${env.FLYWAY_DB_URL_SPRING_SALE_TEST}</url>
+                    <user>${env.FLYWAY_DB_USER_SPRING_SALE_TEST}</user>
+                    <password>${env.FLYWAY_DB_PASSWORD_SPRING_SALE_TEST}</password>
                     <cleanDisabled>false</cleanDisabled>
                     <schemas>
                         <schema>public</schema>
