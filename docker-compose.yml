@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: admin123
       POSTGRES_DB: db_spring_sale
     ports:
       - 5432:5432
@@ -21,8 +21,8 @@ services:
     container_name: container_pgadmin4
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: flaviojunior.work@gmail.com
-      PGADMIN_DEFAULT_USER: jr
+      PGADMIN_DEFAULT_EMAIL: john.doe@example.com
+      PGADMIN_DEFAULT_USER: john
       PGADMIN_DEFAULT_PASSWORD: admin123
     ports:
       - 5050:80
