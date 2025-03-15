@@ -8,7 +8,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/db_spring_sale?useTimezone=true&serverTimezone=America/Sao_Paulo
     username: postgres
-    password: postgres
+    password: admin123
   mail:
     host: ${EMAIL_HOST_SPRING_SALE:smtp.gmail.com}
     port: ${EMAIL_PORT_SPRING_SALE:587}
