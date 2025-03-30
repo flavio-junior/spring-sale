@@ -34,7 +34,7 @@
         <auth0.version>4.5.0</auth0.version>
         <springframework.version>3.4.3</springframework.version>
         <postgresql.version>42.7.5</postgresql.version>
-        <flyway.core.version>10.21.0</flyway.core.version>
+        <flyway.version>10.21.0</flyway.version>
         <modelmapper.version>3.0.0</modelmapper.version>
         <amazonaws.version>1.12.765</amazonaws.version>
     </properties>
@@ -73,12 +73,12 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>${flyway.core.version}</version>
+            <version>${flyway.version}</version>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-            <version>${flyway.core.version}</version>
+            <version>${flyway.version}</version>
         </dependency>
         <dependency>
             <groupId>org.modelmapper</groupId>
@@ -150,7 +150,7 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>${flyway.core.version}</version>
+                <version>${flyway.version}</version>
                 <configuration>
                     <url>${env.FLYWAY_DB_URL_SPRING_SALE_TEST}</url>
                     <user>${env.FLYWAY_DB_USER_SPRING_SALE_TEST}</user>
