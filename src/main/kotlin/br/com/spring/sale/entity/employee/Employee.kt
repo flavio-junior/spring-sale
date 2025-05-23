@@ -16,10 +16,10 @@ data class Employee(
     var createdAt: LocalDateTime? = null,
     @Column(name = "name", nullable = false)
     var name: String = "",
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varying")
     var function: Function? = null,
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varying")
     var status: StatusEmployee? = null,
     @ManyToOne(cascade = [CascadeType.ALL])

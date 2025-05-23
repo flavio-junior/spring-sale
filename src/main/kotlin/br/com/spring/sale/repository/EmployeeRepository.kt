@@ -21,36 +21,36 @@ interface EmployeeRepository : JpaRepository<Employee, Long> {
     """
     )
     fun findAllEmployees(
-        @Param("companyId") companyId: Long? = null,
-        @Param("name") name: String?,
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "name") name: String?,
         pageable: Pageable
     ): Page<Employee>?
 
     @Query(value = "SELECT e FROM Employee e WHERE e.company.id = :companyId AND e.id = :employeeId")
     fun findEmployeeById(
-        @Param("companyId") companyId: Long? = null,
-        @Param("employeeId") employeeId: Long
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "employeeId") employeeId: Long
     ): Employee?
 
     @Query(
         value = "SELECT e FROM Employee e WHERE e.company.id = :companyId AND LOWER(e.name) LIKE LOWER(CONCAT('%', :name, '%'))"
     )
     fun findEmployeeByName(
-        @Param("companyId") companyId: Long? = null,
-        @Param("name") name: String?
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "name") name: String?
     ): List<Employee>
 
     @Modifying
-    @Query("UPDATE Employee e SET e.status =:status WHERE e.id = :employeeId")
+    @Query(value = "UPDATE Employee e SET e.status =:status WHERE e.id = :employeeId")
     fun changeStatusEmployee(
-        @Param("employeeId") employeeId: Long,
-        @Param("status") status: StatusEmployee
+        @Param(value = "employeeId") employeeId: Long,
+        @Param(value = "status") status: StatusEmployee
     )
 
     @Modifying
     @Query(value = "DELETE FROM Employee e WHERE e.id = :employeeId AND e.company.id = :companyId")
     fun deleteEmployeeById(
-        @Param("companyId") companyId: Long? = null,
-        @Param("employeeId") employeeId: Long
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "employeeId") employeeId: Long
     ): Int
 }

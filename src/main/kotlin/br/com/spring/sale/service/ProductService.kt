@@ -39,7 +39,7 @@ class ProductService {
         val companySaved = companyService.getCompanyByUserLogged(user = user)
         val products: Page<Product>? =
             productRepository.findAllProducts(companyId = companySaved.id, name = name, pageable = pageable)
-        return products?.map { product -> parseObject(product, ProductResponseVO::class.java) }
+        return products?.map { product -> parseObject(origin = product, destination = ProductResponseVO::class.java) }
             ?: throw ResourceNotFoundException(message = PRODUCT_NOT_FOUND)
     }
 
@@ -50,7 +50,7 @@ class ProductService {
     ): List<ProductResponseVO> {
         val companySaved = companyService.getCompanyByUserLogged(user = user)
         val products: List<Product> = productRepository.findProductByName(companyId = companySaved.id, name = name)
-        return products.map { product -> parseObject(product, ProductResponseVO::class.java) }
+        return products.map { product -> parseObject(origin = product, destination = ProductResponseVO::class.java) }
     }
 
     @Transactional(readOnly = true)
@@ -59,7 +59,7 @@ class ProductService {
         productId: Long
     ): ProductResponseVO {
         val product = getProduct(user = user, productId = productId)
-        return parseObject(product, ProductResponseVO::class.java)
+        return parseObject(origin = product, destination = ProductResponseVO::class.java)
     }
 
     fun getProduct(
@@ -67,11 +67,12 @@ class ProductService {
         productId: Long
     ): Product {
         val companySaved = companyService.getCompanyByUserLogged(user = user)
-        val productSaved: Product? = productRepository.findProductById(companyId = companySaved.id, productId = productId)
+        val productSaved: Product? =
+            productRepository.findProductById(companyId = companySaved.id, productId = productId)
         if (productSaved != null) {
             return productSaved
         } else {
-            throw ResourceNotFoundException(PRODUCT_NOT_FOUND)
+            throw ResourceNotFoundException(message = PRODUCT_NOT_FOUND)
         }
     }
 
@@ -86,7 +87,10 @@ class ProductService {
                 categoryService.converterCategories(user = user, categories = product.categories)
             productResult.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
             productResult.company = companyService.getCompanyByUserLogged(user = user)
-            return parseObject(productRepository.save(productResult), ProductResponseVO::class.java)
+            return parseObject(
+                origin = productRepository.save(productResult),
+                destination = ProductResponseVO::class.java
+            )
         } else {
             throw ObjectDuplicateException(message = DUPLICATE_NAME_PRODUCT)
         }
@@ -114,7 +118,7 @@ class ProductService {
                 categoryService.converterCategories(user = user, categories = product.categories)
             productSaved.price = product.price
             productSaved.quantity = product.quantity
-            return parseObject(productRepository.save(productSaved), ProductResponseVO::class.java)
+            return parseObject(origin = productRepository.save(productSaved), destination = ProductResponseVO::class.java)
         } else {
             throw ObjectDuplicateException(message = DUPLICATE_NAME_PRODUCT)
         }
@@ -127,7 +131,11 @@ class ProductService {
         price: PriceRequestVO
     ) {
         val productSaved = getProduct(user = user, productId = productId)
-        productRepository.updatePriceProduct(companyId = productSaved.company?.id, idProduct = productSaved.id, price = price.price)
+        productRepository.updatePriceProduct(
+            companyId = productSaved.company?.id,
+            idProduct = productSaved.id,
+            price = price.price
+        )
     }
 
     @Transactional

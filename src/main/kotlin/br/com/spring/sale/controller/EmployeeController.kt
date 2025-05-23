@@ -80,7 +80,7 @@ class EmployeeController {
         ) {
             throw ForbiddenActionRequestException(exception = EMPTY_FIELDS)
         }
-        employeeService.createNewEmployee(user, employee)
+        employeeService.createNewEmployee(user = user, employee = employee)
         return ResponseEntity.status(HttpStatus.CREATED).build<Any>()
     }
 

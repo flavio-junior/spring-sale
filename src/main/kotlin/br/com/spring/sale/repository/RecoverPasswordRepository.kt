@@ -12,16 +12,16 @@ import java.time.Instant
 interface RecoverPasswordRepository : JpaRepository<RecoverPassword, Long> {
 
     @Query(value = "SELECT rp FROM RecoverPassword rp WHERE rp.email =:email")
-    fun findByEmail(@Param("email") email: String?): RecoverPassword?
+    fun findByEmail(@Param(value = "email") email: String?): RecoverPassword?
 
     @Query(value = "SELECT COUNT(rp) FROM RecoverPassword rp WHERE rp.token = :code")
-    fun checkCodeAlreadyExists(@Param("code") code: String): Long
+    fun checkCodeAlreadyExists(@Param(value = "code") code: String): Long
 
     @Modifying
     @Query(value = "UPDATE RecoverPassword rp SET rp.token =:token, rp.expiration =:expiration WHERE rp.email =:email")
     fun updateTokenAndDataExpiration(
-        @Param("email") email: String?,
-        @Param("token") token: Long?,
-        @Param("expiration") expiration: Instant?
+        @Param(value = "email") email: String?,
+        @Param(value = "token") token: Long?,
+        @Param(value = "expiration") expiration: Instant?
     )
 }

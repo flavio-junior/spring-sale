@@ -34,7 +34,7 @@ class AuthController {
         require(value = emailVO.email.isNotEmpty() && emailVO.email.isNotBlank()) {
             throw ForbiddenActionRequestException(exception = EMPTY_FIELDS)
         }
-        authService.confirmEmailAddress(emailVO)
+        authService.confirmEmailAddress(emailVO = emailVO)
         return ResponseEntity.noContent().build<Any>()
     }
 
@@ -57,19 +57,21 @@ class AuthController {
         ) {
             throw ForbiddenActionRequestException(exception = EMPTY_FIELDS)
         }
-        authService.signUp(signUpVO)
+        authService.signUp(data = signUpVO)
         return ResponseEntity.status(HttpStatus.CREATED).build<Any>()
     }
 
     @PostMapping(value = ["/signIn"])
-    fun signIn(@RequestBody signInVO: SignInRequestVO): ResponseEntity<TokenVO> {
+    fun signIn(
+        @RequestBody signInVO: SignInRequestVO
+    ): ResponseEntity<TokenVO> {
         require(
             value = signInVO.email.isNotEmpty() && signInVO.email.isNotBlank() &&
                     signInVO.password.isNotEmpty() && signInVO.password.isNotBlank()
         ) {
             throw ForbiddenActionRequestException(exception = EMPTY_FIELDS)
         }
-        return ResponseEntity.ok(authService.signIn(signInVO))
+        return ResponseEntity.ok(authService.signIn(signInVO = signInVO))
     }
 
     @PostMapping(value = ["/recover-password"])
@@ -109,9 +111,9 @@ class AuthController {
 
     @PutMapping(value = ["/refresh/{email}"])
     fun refreshToken(
-        @PathVariable("email") email: String,
-        @RequestHeader("Authorization") refreshToken: String,
+        @PathVariable(value = "email") email: String,
+        @RequestHeader(value = "Authorization") refreshToken: String,
     ): ResponseEntity<TokenVO> {
-        return ResponseEntity.ok(authService.refreshToken(email, refreshToken))
+        return ResponseEntity.ok(authService.refreshToken(email = email, refreshToken = refreshToken))
     }
 }

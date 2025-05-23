@@ -48,6 +48,13 @@ class CompanyService {
     }
 
     @Transactional(readOnly = true)
+    fun findCompanyByUserLogged(
+        user: User
+    ): CompanyResponseVO {
+        return parseObject(origin = getCompanyByUserLogged(user = user), destination = CompanyResponseVO::class.java)
+    }
+
+    @Transactional(readOnly = true)
     fun getCompanyByUserLogged(
         user: User
     ): Company {

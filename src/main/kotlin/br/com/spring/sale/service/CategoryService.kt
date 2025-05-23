@@ -31,7 +31,9 @@ class CategoryService {
         val companySaved = companyService.getCompanyByUserLogged(user = user)
         val categories: Page<Category> =
             categoryRepository.findAllCategories(companyId = companySaved.id, name = name, pageable = pageable)
-        return categories.map { category -> parseObject(category, CategoryResponseVO::class.java) }
+        return categories.map { category ->
+            parseObject(origin = category, destination = CategoryResponseVO::class.java)
+        }
     }
 
     @Transactional(readOnly = true)
@@ -41,7 +43,7 @@ class CategoryService {
     ): List<CategoryResponseVO> {
         val companySaved = companyService.getCompanyByUserLogged(user = user)
         val products: List<Category> = categoryRepository.findCategoryByName(companyId = companySaved.id, name = name)
-        return products.map { product -> parseObject(product, CategoryResponseVO::class.java) }
+        return products.map { product -> parseObject(origin = product, destination = CategoryResponseVO::class.java) }
     }
 
     @Transactional(readOnly = true)
@@ -50,7 +52,7 @@ class CategoryService {
         categoryId: Long
     ): CategoryResponseVO {
         val category = getCategory(categoryId = categoryId, user = user)
-        return parseObject(category, CategoryResponseVO::class.java)
+        return parseObject(origin = category, destination = CategoryResponseVO::class.java)
     }
 
     fun getCategory(
@@ -86,7 +88,10 @@ class CategoryService {
         if (!checkNameCategoryAlreadyExists(companyId = companySaved.id, name = category.name)) {
             val categoryResult: Category = parseObject(category, Category::class.java)
             categoryResult.company = companySaved
-            return parseObject(categoryRepository.save(categoryResult), CategoryResponseVO::class.java)
+            return parseObject(
+                origin = categoryRepository.save(categoryResult),
+                destination = CategoryResponseVO::class.java
+            )
         } else {
             throw ObjectDuplicateException(message = DUPLICATE_NAME_CATEGORY)
         }
@@ -108,7 +113,10 @@ class CategoryService {
         if (!checkNameCategoryAlreadyExists(companyId = companySaved.id, name = category.name)) {
             val categoryResult: Category = getCategory(user = user, categoryId = category.id)
             categoryResult.name = category.name
-            return parseObject(categoryRepository.save(categoryResult), CategoryResponseVO::class.java)
+            return parseObject(
+                origin = categoryRepository.save(categoryResult),
+                destination = CategoryResponseVO::class.java
+            )
         } else {
             throw ObjectDuplicateException(message = DUPLICATE_NAME_CATEGORY)
 

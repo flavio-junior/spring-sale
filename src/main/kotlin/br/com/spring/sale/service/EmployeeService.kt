@@ -44,7 +44,12 @@ class EmployeeService {
         val companySaved = companyService.getCompanyByUserLogged(user = user)
         val employees: Page<Employee>? =
             employeeRepository.findAllEmployees(companyId = companySaved.id, name = name, pageable = pageable)
-        return employees?.map { employee -> parseObject(employee, EmployeeResponseVO::class.java) }
+        return employees?.map { employee ->
+            parseObject(
+                origin = employee,
+                destination = EmployeeResponseVO::class.java
+            )
+        }
             ?: throw ResourceNotFoundException(message = EMPLOYEE_NOT_FOUND)
     }
 
@@ -54,7 +59,7 @@ class EmployeeService {
         employeeId: Long
     ): EmployeeResponseVO {
         val employee = getEmployee(user = user, employeeId = employeeId)
-        return parseObject(employee, EmployeeResponseVO::class.java)
+        return parseObject(origin = employee, destination = EmployeeResponseVO::class.java)
     }
 
     @Transactional(readOnly = true)
@@ -64,7 +69,7 @@ class EmployeeService {
     ): List<EmployeeResponseVO> {
         val companySaved = companyService.getCompanyByUserLogged(user = user)
         val employees = employeeRepository.findEmployeeByName(companyId = companySaved.id, name = name)
-        return parseListObjects(employees, EmployeeResponseVO::class.java)
+        return parseListObjects(origin = employees, destination = EmployeeResponseVO::class.java)
     }
 
     fun getEmployee(
@@ -77,7 +82,7 @@ class EmployeeService {
         if (employeeSaved != null) {
             return employeeSaved
         } else {
-            throw ResourceNotFoundException(EMPLOYEE_NOT_FOUND)
+            throw ResourceNotFoundException(message = EMPLOYEE_NOT_FOUND)
         }
     }
 

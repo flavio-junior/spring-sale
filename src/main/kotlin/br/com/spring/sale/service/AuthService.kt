@@ -101,7 +101,7 @@ class AuthService {
         val entity: Security? = securityRepository.checkCodeSend(code = code)
         entity?.let {
             if (it.expiration.isBefore(LocalDateTime.now())) {
-                throw ForbiddenActionRequestException(EXPIRED_CODE)
+                throw ForbiddenActionRequestException(exception = EXPIRED_CODE)
             }
         } ?: throw ResourceNotFoundException(message = CODE_NOT_FOUND)
     }
@@ -140,9 +140,9 @@ class AuthService {
 
     @Transactional
     fun createRecoverPassword(emailVO: EmailVO) {
-        val user: User? = userRepository.fetchByEmail(emailVO.email)
+        val user: User? = userRepository.fetchByEmail(email = emailVO.email)
         user?.let {
-            val recoverPassword: RecoverPassword? = recoverPasswordRepository.findByEmail(it.email)
+            val recoverPassword: RecoverPassword? = recoverPasswordRepository.findByEmail(email = it.email)
             if (recoverPassword != null) {
                 val token = generateCode()
                 val expiration: Instant = Instant.now().plusSeconds(tokenMinutes * 60)
@@ -153,7 +153,11 @@ class AuthService {
                 )
                 val text =
                     "Utilize o código abaixo para redefinir sua senha:\n Código: $token\n O código gerado tem validade de $tokenMinutes minutos."
-                emailService.sendEmailToConfirmation(emailVO.email, SUBJECT_RECOVER_PASSWORD, text)
+                emailService.sendEmailToConfirmation(
+                    to = emailVO.email,
+                    subject = SUBJECT_RECOVER_PASSWORD,
+                    body = text
+                )
             } else {
                 val token = generateCode()
                 val expiration: Instant = Instant.now().plusSeconds(tokenMinutes * 60)
@@ -165,7 +169,11 @@ class AuthService {
                 recoverPasswordRepository.save(recover)
                 val text =
                     "Utilize o código abaixo para redefinir sua senha:\nCódigo: $token\nO código gerado tem validade de $tokenMinutes minutos."
-                emailService.sendEmailToConfirmation(emailVO.email, SUBJECT_RECOVER_PASSWORD, text)
+                emailService.sendEmailToConfirmation(
+                    to = emailVO.email,
+                    subject = SUBJECT_RECOVER_PASSWORD,
+                    body = text
+                )
             }
         } ?: throw ResourceNotFoundException(message = EMAIL_NOT_FOUND)
     }
@@ -184,7 +192,7 @@ class AuthService {
         val recoverPassword: RecoverPassword? = recoverPasswordRepository.findByEmail(email = passwordVO.email)
         recoverPassword?.let {
             if (it.expiration!!.isAfter(Instant.now())) {
-                val userInstanced: User? = userRepository.fetchByEmail(passwordVO.email)
+                val userInstanced: User? = userRepository.fetchByEmail(email = passwordVO.email)
                 if (userInstanced != null) {
                     userInstanced.password = passwordEncoder.encode(passwordVO.password)
                     userRepository.save(userInstanced)
@@ -192,7 +200,7 @@ class AuthService {
                     throw ResourceNotFoundException(message = EMAIL_NOT_FOUND)
                 }
             } else {
-                throw ForbiddenActionRequestException(EXPIRED_CODE)
+                throw ForbiddenActionRequestException(exception = EXPIRED_CODE)
             }
         } ?: throw ResourceNotFoundException(message = EMAIL_NOT_FOUND)
     }

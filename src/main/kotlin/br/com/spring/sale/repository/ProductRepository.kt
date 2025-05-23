@@ -14,8 +14,8 @@ interface ProductRepository : JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE p.company.id = :companyId AND p.name = :name")
     fun checkNameProductAlreadyExists(
-        @Param("companyId") companyId: Long? = null,
-        @Param("name") name: String
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "name") name: String
     ): Product?
 
     @Query(
@@ -26,45 +26,45 @@ interface ProductRepository : JpaRepository<Product, Long> {
     """
     )
     fun findAllProducts(
-        @Param("companyId") companyId: Long? = null,
-        @Param("name") name: String?,
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "name") name: String?,
         pageable: Pageable
     ): Page<Product>?
 
     @Query(value = "SELECT p FROM Product p WHERE p.company.id = :companyId AND p.id = :productId")
     fun findProductById(
-        @Param("companyId") companyId: Long? = null,
-        @Param("productId") productId: Long
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "productId") productId: Long
     ): Product?
 
     @Query(
         value = "SELECT p FROM Product p WHERE p.company.id = :companyId AND LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')) AND p.quantity > 0"
     )
     fun findProductByName(
-        @Param("companyId") companyId: Long? = null,
-        @Param("name") name: String?
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "name") name: String?
     ): List<Product>
 
     @Modifying
-    @Query("UPDATE Product p SET p.price =:price WHERE p.company.id = :companyId AND p.id =:id")
+    @Query(value = "UPDATE Product p SET p.price =:price WHERE p.company.id = :companyId AND p.id =:id")
     fun updatePriceProduct(
-        @Param("companyId") companyId: Long? = null,
-        @Param("id") idProduct: Long,
-        @Param("price") price: Double
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "id") idProduct: Long,
+        @Param(value = "price") price: Double
     )
 
     @Modifying
-    @Query("UPDATE Product p SET p.quantity = p.quantity + :quantity WHERE p.company.id = :companyId AND p.id = :id")
+    @Query(value = "UPDATE Product p SET p.quantity = p.quantity + :quantity WHERE p.company.id = :companyId AND p.id = :id")
     fun restockProduct(
-        @Param("companyId") companyId: Long? = null,
-        @Param("id") idProduct: Long,
-        @Param("quantity") quantity: Int
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "id") idProduct: Long,
+        @Param(value = "quantity") quantity: Int
     )
 
     @Modifying
     @Query(value = "DELETE FROM Product p WHERE p.id = :productId AND p.company.id = :companyId")
     fun deleteProductById(
-        @Param("companyId") companyId: Long? = null,
-        @Param("productId") productId: Long
+        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "productId") productId: Long
     ): Int
 }

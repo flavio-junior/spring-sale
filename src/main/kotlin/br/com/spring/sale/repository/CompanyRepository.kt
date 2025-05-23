@@ -11,11 +11,11 @@ interface CompanyRepository : JpaRepository<Company, Long> {
 
     @Query(value = "SELECT c FROM Company c WHERE c.user.id = :userLoggedId")
     fun getCompanyByUserLogged(
-        @Param("userLoggedId") userLoggedId: Long? = null
+        @Param(value = "userLoggedId") userLoggedId: Long? = null
     ): Company?
 
     @Query(value = "SELECT c FROM Company c WHERE c.employee.id = :employeeLoggedId")
     fun getCompanyByEmployeeLogged(
-        @Param("employeeLoggedId") employeeLoggedId: Long?
+        @Param(value = "employeeLoggedId") employeeLoggedId: Long?
     ): Company?
 }

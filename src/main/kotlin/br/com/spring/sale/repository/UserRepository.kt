@@ -13,20 +13,20 @@ interface UserRepository : JpaRepository<User?, Long?> {
 
     fun findByEmail(email: String?): UserDetails?
 
-    @Query("SELECT u FROM User u WHERE u.email =:email")
+    @Query(value = "SELECT u FROM User u WHERE u.email =:email")
     fun fetchByEmail(email: String?): User?
 
     @Modifying
-    @Query("UPDATE User u SET u.enabled = false WHERE u.id =:id AND u.email =:email")
+    @Query(value = "UPDATE User u SET u.enabled = false WHERE u.id =:id AND u.email =:email")
     fun disabledProfileEmployee(
-        @Param("id") userId: Long,
-        @Param("email") email: String
+        @Param(value = "id") userId: Long,
+        @Param(value = "email") email: String
     )
 
     @Modifying
-    @Query("UPDATE User u SET u.enabled = true WHERE u.id =:id AND u.email =:email")
+    @Query(value = "UPDATE User u SET u.enabled = true WHERE u.id =:id AND u.email =:email")
     fun enabledProfileEmployee(
-        @Param("id") userId: Long,
-        @Param("email") email: String
+        @Param(value = "id") userId: Long,
+        @Param(value = "email") email: String
     )
 }
