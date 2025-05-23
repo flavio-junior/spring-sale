@@ -4,7 +4,15 @@ import br.com.spring.sale.entity.user.User
 import br.com.spring.sale.exceptions.ForbiddenActionRequestException
 import br.com.spring.sale.service.CategoryService
 import br.com.spring.sale.utils.others.ConstantsUtils.EMPTY_FIELDS
+import br.com.spring.sale.utils.others.MediaType.APPLICATION_JSON
+import br.com.spring.sale.utils.others.MediaType.APPLICATION_MULTI_PART
 import br.com.spring.sale.vo.category.CategoryResponseVO
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -26,12 +34,52 @@ import java.net.URI
 
 @RestController
 @RequestMapping(value = ["/api/spring/sale/categories/v1"])
+@Tag(name = "Category", description = "EndPoint For Managing All Categories")
 class CategoryController {
 
     @Autowired
     private lateinit var categoryService: CategoryService
 
-    @GetMapping
+    @GetMapping(
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Find All Categories By User Logged",
+        description = "Find All Categories By User Logged",
+        tags = ["Category"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(array = ArraySchema(schema = Schema(implementation = CategoryResponseVO::class)))
+                ]
+            ),
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun findAllCategories(
         @AuthenticationPrincipal user: User,
         @RequestParam(required = false) name: String?,
@@ -47,17 +95,47 @@ class CategoryController {
         )
     }
 
-    @GetMapping(value = ["/find/category/by/{name}"])
-    fun findCategoryByName(
-        @AuthenticationPrincipal user: User,
-        @PathVariable(value = "name") name: String,
-    ): ResponseEntity<List<CategoryResponseVO>> {
-        return ResponseEntity.ok(
-            categoryService.findCategoryByName(user = user, name = name)
-        )
-    }
-
-    @GetMapping(value = ["/{id}"])
+    @GetMapping(
+        value = ["/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Find Category By Id",
+        description = "Find Category By Id",
+        tags = ["Category"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(array = ArraySchema(schema = Schema(implementation = CategoryResponseVO::class)))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun findById(
         @AuthenticationPrincipal user: User,
         @PathVariable(value = "id") categoryId: Long
@@ -65,7 +143,44 @@ class CategoryController {
         return categoryService.findCategoryById(user = user, categoryId = categoryId)
     }
 
-    @PostMapping
+    @PostMapping(produces = [APPLICATION_JSON])
+    @Operation(
+        summary = "Create New Category",
+        description = "Create New Category",
+        tags = ["Category"],
+        responses = [
+            ApiResponse(
+                description = "Created", responseCode = "201", content = [
+                    Content(schema = Schema(implementation = CategoryResponseVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Conflict", responseCode = "409", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun createNewCategory(
         @AuthenticationPrincipal user: User,
         @RequestBody categoryResponseVO: CategoryResponseVO
@@ -81,7 +196,53 @@ class CategoryController {
         return ResponseEntity.created(uri).body(entity)
     }
 
-    @PutMapping
+    @PutMapping(
+        value = ["/{id}"],
+        consumes = [APPLICATION_MULTI_PART],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Update Category",
+        description = "Update Category",
+        tags = ["Category"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(schema = Schema(implementation = CategoryResponseVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Conflict", responseCode = "409", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun updateCategory(
         @AuthenticationPrincipal user: User,
         @RequestBody category: CategoryResponseVO
@@ -89,7 +250,47 @@ class CategoryController {
         return categoryService.updateCategory(user = user, category = category)
     }
 
-    @DeleteMapping(value = ["/{id}"])
+    @DeleteMapping(
+        value = ["/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Delete Category",
+        description = "Delete Category",
+        tags = ["Category"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun deleteCategory(
         @AuthenticationPrincipal user: User,
         @PathVariable(value = "id") categoryId: Long

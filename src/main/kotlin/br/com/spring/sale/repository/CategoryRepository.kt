@@ -37,14 +37,6 @@ interface CategoryRepository : JpaRepository<Category, Long?> {
         @Param(value = "idCategory") categoryId: Long
     ): Category?
 
-    @Query(
-        value = "SELECT c FROM Category c WHERE c.company.id = :companyId AND LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))"
-    )
-    fun findCategoryByName(
-        @Param(value = "companyId") companyId: Long? = null,
-        @Param(value = "name") name: String?
-    ): List<Category>
-
     @Modifying
     @Query(value = "DELETE FROM Category c WHERE c.id = :categoryId AND c.company.id = :companyId")
     fun deleteCategoryById(

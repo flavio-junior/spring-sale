@@ -3,11 +3,18 @@ package br.com.spring.sale.controller
 import br.com.spring.sale.exceptions.ForbiddenActionRequestException
 import br.com.spring.sale.service.AuthService
 import br.com.spring.sale.utils.others.ConstantsUtils.EMPTY_FIELDS
+import br.com.spring.sale.utils.others.MediaType.APPLICATION_JSON
 import br.com.spring.sale.vo.user.EmailVO
 import br.com.spring.sale.vo.user.NewPasswordVO
 import br.com.spring.sale.vo.user.SignInRequestVO
 import br.com.spring.sale.vo.user.SignUpVO
 import br.com.spring.sale.vo.user.TokenVO
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,12 +29,48 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(value = ["/api/auth/v1"])
+@Tag(name = "Auth", description = "EndPoint For Manager Authentication")
 class AuthController {
 
     @Autowired
     private lateinit var authService: AuthService
 
-    @PostMapping(value = ["/confirm-email-address"])
+    @PostMapping(
+        value = ["/confirm-email-address"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Confirm Email",
+        description = "Confirm Email",
+        tags = ["Auth"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(array = ArraySchema(schema = Schema(implementation = Unit::class)))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun confirmEmailAddress(
         @RequestBody emailVO: EmailVO
     ): ResponseEntity<*> {
@@ -38,7 +81,47 @@ class AuthController {
         return ResponseEntity.noContent().build<Any>()
     }
 
-    @GetMapping(value = ["/check-code-existent/{code}"])
+    @GetMapping(
+        value = ["/check-code-existent/{code}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Check Code Existent",
+        description = "Check Code Existent",
+        tags = ["Auth"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(array = ArraySchema(schema = Schema(implementation = Unit::class)))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun checkCodeSendToConfirmEmail(
         @PathVariable code: String
     ): ResponseEntity<*> {
@@ -46,7 +129,48 @@ class AuthController {
         return ResponseEntity.noContent().build<Any>()
     }
 
-    @PostMapping(value = ["/signUp"])
+    @PostMapping(
+        value = ["/signUp"],
+        consumes = [APPLICATION_JSON],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Create New User",
+        description = "Create New User",
+        tags = ["Auth"],
+        responses = [
+            ApiResponse(
+                description = "Created", responseCode = "201", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Conflict", responseCode = "409", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun signUp(
         @RequestBody signUpVO: SignUpVO
     ): ResponseEntity<*> {
@@ -61,7 +185,43 @@ class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).build<Any>()
     }
 
-    @PostMapping(value = ["/signIn"])
+    @PostMapping(
+        value = ["/signIn"],
+        consumes = [APPLICATION_JSON],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Authentication",
+        description = "Authentication",
+        tags = ["Auth"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(schema = Schema(implementation = TokenVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun signIn(
         @RequestBody signInVO: SignInRequestVO
     ): ResponseEntity<TokenVO> {
@@ -74,7 +234,43 @@ class AuthController {
         return ResponseEntity.ok(authService.signIn(signInVO = signInVO))
     }
 
-    @PostMapping(value = ["/recover-password"])
+    @PostMapping(
+        value = ["/recover-password"],
+        consumes = [APPLICATION_JSON],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Recover Password",
+        description = "Recover Password",
+        tags = ["Auth"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun createRecoverPassword(
         @RequestBody emailVO: EmailVO
     ): ResponseEntity<*> {
@@ -85,7 +281,46 @@ class AuthController {
         return ResponseEntity.noContent().build<Any>()
     }
 
-    @GetMapping(value = ["/check-recover-password/{code}"])
+    @GetMapping(
+        value = ["/check-recover-password/{code}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Check Recover Password",
+        description = "Check Recover Password",
+        tags = ["Auth"], responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(array = ArraySchema(schema = Schema(implementation = Unit::class)))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun checkRecoverPassword(
         @PathVariable code: String
     ): ResponseEntity<*> {
@@ -93,7 +328,48 @@ class AuthController {
         return ResponseEntity.noContent().build<Any>()
     }
 
-    @PutMapping(value = ["/new-password"])
+    @PutMapping(
+        value = ["/new-password"],
+        consumes = [APPLICATION_JSON],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Create New Password",
+        description = "Create New Password",
+        tags = ["Auth"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun saveNewPassword(
         @RequestBody passwordVO: NewPasswordVO
     ): ResponseEntity<*> {
@@ -109,7 +385,48 @@ class AuthController {
         return ResponseEntity.noContent().build<Any>()
     }
 
-    @PutMapping(value = ["/refresh/{email}"])
+    @PutMapping(
+        value = ["/refresh/{email}"],
+        consumes = [APPLICATION_JSON],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Refresh Token",
+        description = "Refresh Token",
+        tags = ["Auth"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(schema = Schema(implementation = TokenVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun refreshToken(
         @PathVariable(value = "email") email: String,
         @RequestHeader(value = "Authorization") refreshToken: String,

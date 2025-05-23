@@ -62,16 +62,6 @@ class EmployeeService {
         return parseObject(origin = employee, destination = EmployeeResponseVO::class.java)
     }
 
-    @Transactional(readOnly = true)
-    fun findEmployeeByName(
-        user: User,
-        name: String
-    ): List<EmployeeResponseVO> {
-        val companySaved = companyService.getCompanyByUserLogged(user = user)
-        val employees = employeeRepository.findEmployeeByName(companyId = companySaved.id, name = name)
-        return parseListObjects(origin = employees, destination = EmployeeResponseVO::class.java)
-    }
-
     fun getEmployee(
         user: User,
         employeeId: Long

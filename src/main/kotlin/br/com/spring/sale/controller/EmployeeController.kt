@@ -3,9 +3,17 @@ package br.com.spring.sale.controller
 import br.com.spring.sale.entity.user.User
 import br.com.spring.sale.exceptions.ForbiddenActionRequestException
 import br.com.spring.sale.service.EmployeeService
+import br.com.spring.sale.utils.common.PriceRequestVO
 import br.com.spring.sale.utils.others.ConstantsUtils.EMPTY_FIELDS
+import br.com.spring.sale.utils.others.MediaType.APPLICATION_JSON
 import br.com.spring.sale.vo.employee.EmployeeResponseVO
 import br.com.spring.sale.vo.employee.RegisterEmployeeRequestVO
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -26,12 +34,50 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(value = ["/api/spring/sale/employees/v1"])
+@Tag(name = "Employee", description = "EndPoint For Managing All Employees")
 class EmployeeController {
 
     @Autowired
     private lateinit var employeeService: EmployeeService
 
-    @GetMapping
+    @GetMapping(produces = [APPLICATION_JSON])
+    @Operation(
+        summary = "List All Employees",
+        description = "List All Employees",
+        tags = ["Employee"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(array = ArraySchema(schema = Schema(implementation = EmployeeResponseVO::class)))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun finAllEmployees(
         @AuthenticationPrincipal user: User,
         @RequestParam(required = false) name: String?,
@@ -47,7 +93,47 @@ class EmployeeController {
         )
     }
 
-    @GetMapping(value = ["/{id}"])
+    @GetMapping(
+        value = ["/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Find Employee By Id",
+        description = "Find Employee By Id",
+        tags = ["Employee"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(array = ArraySchema(schema = Schema(implementation = EmployeeResponseVO::class)))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun findEmployeeById(
         @AuthenticationPrincipal user: User,
         @PathVariable(value = "id") employeeId: Long
@@ -55,17 +141,51 @@ class EmployeeController {
         return employeeService.findEmployeeById(user = user, employeeId = employeeId)
     }
 
-    @GetMapping(value = ["/find/employee/by/{name}"])
-    fun findEmployeeByName(
-        @AuthenticationPrincipal user: User,
-        @PathVariable(value = "name") name: String,
-    ): ResponseEntity<List<EmployeeResponseVO>> {
-        return ResponseEntity.ok(
-            employeeService.findEmployeeByName(user = user, name = name)
-        )
-    }
-
-    @PostMapping
+    @PostMapping(
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Create New Employee",
+        description = "Create New Employee",
+        tags = ["Employee"],
+        responses = [
+            ApiResponse(
+                description = "Created", responseCode = "201", content = [
+                    Content(schema = Schema(implementation = EmployeeResponseVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Conflict", responseCode = "409", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun createNewEmployee(
         @AuthenticationPrincipal user: User,
         @RequestBody employee: RegisterEmployeeRequestVO
@@ -84,7 +204,52 @@ class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).build<Any>()
     }
 
-    @PatchMapping(value = ["/disabled/{id}"])
+    @PatchMapping(
+        value = ["/disabled/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Update Price of Employee",
+        description = "Update Price of Employee",
+        tags = ["Employee"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = PriceRequestVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Conflict", responseCode = "409", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun disabledProfileEmployee(
         @PathVariable(value = "id") employeeId: Long
     ): ResponseEntity<*> {
@@ -92,7 +257,52 @@ class EmployeeController {
         return ResponseEntity.noContent().build<Any>()
     }
 
-    @PatchMapping(value = ["/enabled/{id}"])
+    @PatchMapping(
+        value = ["/enabled/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Update Price of Employee",
+        description = "Update Price of Employee",
+        tags = ["Employee"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = PriceRequestVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Conflict", responseCode = "409", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun enabledProfileEmployee(
         @PathVariable(value = "id") employeeId: Long
     ): ResponseEntity<*> {
@@ -100,7 +310,47 @@ class EmployeeController {
         return ResponseEntity.noContent().build<Any>()
     }
 
-    @DeleteMapping(value = ["/{id}"])
+    @DeleteMapping(
+        value = ["/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Delete Employee",
+        description = "Delete Employee",
+        tags = ["Employee"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun deleteEmployee(
         @AuthenticationPrincipal user: User,
         @PathVariable(value = "id") employeeId: Long

@@ -5,9 +5,16 @@ import br.com.spring.sale.exceptions.ForbiddenActionRequestException
 import br.com.spring.sale.service.ProductService
 import br.com.spring.sale.utils.common.PriceRequestVO
 import br.com.spring.sale.utils.others.ConstantsUtils.EMPTY_FIELDS
+import br.com.spring.sale.utils.others.MediaType.APPLICATION_JSON
 import br.com.spring.sale.vo.product.ProductRequestVO
 import br.com.spring.sale.vo.product.ProductResponseVO
 import br.com.spring.sale.vo.product.RestockProductRequestVO
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -30,12 +37,50 @@ import java.net.URI
 
 @RestController
 @RequestMapping(value = ["/api/spring/sale/products/v1"])
+@Tag(name = "Product", description = "EndPoint For Managing All Products")
 class ProductController {
 
     @Autowired
     private lateinit var productService: ProductService
 
-    @GetMapping
+    @GetMapping(produces = [APPLICATION_JSON])
+    @Operation(
+        summary = "List All Products",
+        description = "List All Products",
+        tags = ["Product"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(array = ArraySchema(schema = Schema(implementation = ProductResponseVO::class)))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun findAllProducts(
         @AuthenticationPrincipal user: User,
         @RequestParam(required = false) name: String?,
@@ -51,17 +96,47 @@ class ProductController {
         )
     }
 
-    @GetMapping(value = ["/find/product/by/{name}"])
-    fun findProductByName(
-        @AuthenticationPrincipal user: User,
-        @PathVariable(value = "name") name: String,
-    ): ResponseEntity<List<ProductResponseVO>> {
-        return ResponseEntity.ok(
-            productService.findProductByName(user = user, name = name)
-        )
-    }
-
-    @GetMapping(value = ["/{id}"])
+    @GetMapping(
+        value = ["/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Find Product By Id",
+        description = "Find Product By Id",
+        tags = ["Product"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(array = ArraySchema(schema = Schema(implementation = ProductResponseVO::class)))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun findProductById(
         @AuthenticationPrincipal user: User,
         @PathVariable(value = "id") id: Long
@@ -69,7 +144,51 @@ class ProductController {
         return productService.findProductById(user = user, productId = id)
     }
 
-    @PostMapping
+    @PostMapping(
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Create New Product",
+        description = "Create New Product",
+        tags = ["Product"],
+        responses = [
+            ApiResponse(
+                description = "Created", responseCode = "201", content = [
+                    Content(schema = Schema(implementation = ProductResponseVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Conflict", responseCode = "409", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun createNewProduct(
         @AuthenticationPrincipal user: User,
         @RequestBody product: ProductRequestVO
@@ -85,7 +204,52 @@ class ProductController {
         return ResponseEntity.created(uri).body(entity)
     }
 
-    @PutMapping
+    @PutMapping(
+        value = ["/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Update Product",
+        description = "Update Product",
+        tags = ["Product"],
+        responses = [
+            ApiResponse(
+                description = "Success", responseCode = "200", content = [
+                    Content(schema = Schema(implementation = ProductResponseVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Conflict", responseCode = "409", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun updateProduct(
         @AuthenticationPrincipal user: User,
         @RequestBody product: ProductResponseVO
@@ -93,7 +257,52 @@ class ProductController {
         return productService.updateProduct(user = user, product = product)
     }
 
-    @PatchMapping(value = ["update/price/product/{id}"])
+    @PatchMapping(
+        value = ["update/product/price/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Update Price of Product",
+        description = "Update Price of Product",
+        tags = ["Product"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = PriceRequestVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Conflict", responseCode = "409", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun updatePriceProduct(
         @AuthenticationPrincipal user: User,
         @PathVariable(value = "id") id: Long,
@@ -103,7 +312,47 @@ class ProductController {
         return ResponseEntity.noContent().build<Any>()
     }
 
-    @PatchMapping(value = ["restock/product/{id}"])
+    @PatchMapping(
+        value = ["/restock/product/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Restock Product Product",
+        description = "Restock Product Product",
+        tags = ["Product"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = RestockProductRequestVO::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun restockProduct(
         @AuthenticationPrincipal user: User,
         @PathVariable(value = "id") id: Long,
@@ -113,7 +362,47 @@ class ProductController {
         return ResponseEntity.noContent().build<Any>()
     }
 
-    @DeleteMapping(value = ["/{id}"])
+    @DeleteMapping(
+        value = ["/{id}"],
+        produces = [APPLICATION_JSON]
+    )
+    @Operation(
+        summary = "Delete Product",
+        description = "Delete Product",
+        tags = ["Product"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
     fun deleteProduct(
         @AuthenticationPrincipal user: User,
         @PathVariable(value = "id") id: Long

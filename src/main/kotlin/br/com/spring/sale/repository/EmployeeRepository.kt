@@ -32,14 +32,6 @@ interface EmployeeRepository : JpaRepository<Employee, Long> {
         @Param(value = "employeeId") employeeId: Long
     ): Employee?
 
-    @Query(
-        value = "SELECT e FROM Employee e WHERE e.company.id = :companyId AND LOWER(e.name) LIKE LOWER(CONCAT('%', :name, '%'))"
-    )
-    fun findEmployeeByName(
-        @Param(value = "companyId") companyId: Long? = null,
-        @Param(value = "name") name: String?
-    ): List<Employee>
-
     @Modifying
     @Query(value = "UPDATE Employee e SET e.status =:status WHERE e.id = :employeeId")
     fun changeStatusEmployee(

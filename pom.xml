@@ -37,9 +37,15 @@
         <flyway.version>10.21.0</flyway.version>
         <modelmapper.version>3.0.0</modelmapper.version>
         <amazonaws.version>1.12.765</amazonaws.version>
+        <spring-doc.version>2.8.5</spring-doc.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${spring-doc.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>

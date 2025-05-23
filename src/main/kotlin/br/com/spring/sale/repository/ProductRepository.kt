@@ -37,14 +37,6 @@ interface ProductRepository : JpaRepository<Product, Long> {
         @Param(value = "productId") productId: Long
     ): Product?
 
-    @Query(
-        value = "SELECT p FROM Product p WHERE p.company.id = :companyId AND LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')) AND p.quantity > 0"
-    )
-    fun findProductByName(
-        @Param(value = "companyId") companyId: Long? = null,
-        @Param(value = "name") name: String?
-    ): List<Product>
-
     @Modifying
     @Query(value = "UPDATE Product p SET p.price =:price WHERE p.company.id = :companyId AND p.id =:id")
     fun updatePriceProduct(
