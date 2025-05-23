@@ -82,12 +82,12 @@ class AuthController {
     }
 
     @GetMapping(
-        value = ["/check-code-existent/{code}"],
+        value = ["/check-code-verification/{code}"],
         produces = [APPLICATION_JSON]
     )
     @Operation(
-        summary = "Check Code Existent",
-        description = "Check Code Existent",
+        summary = "Check Code of Verification",
+        description = "Check Code Verification",
         tags = ["Auth"],
         responses = [
             ApiResponse(
@@ -122,15 +122,15 @@ class AuthController {
             )
         ]
     )
-    fun checkCodeSendToConfirmEmail(
+    fun checkCodeVerification(
         @PathVariable code: String
     ): ResponseEntity<*> {
-        authService.checkCodeSendToConfirmEmail(code = code)
+        authService.checkCodeVerification(code = code)
         return ResponseEntity.noContent().build<Any>()
     }
 
     @PostMapping(
-        value = ["/signUp"],
+        value = ["/sign-up"],
         consumes = [APPLICATION_JSON],
         produces = [APPLICATION_JSON]
     )
@@ -186,8 +186,7 @@ class AuthController {
     }
 
     @PostMapping(
-        value = ["/signIn"],
-        consumes = [APPLICATION_JSON],
+        value = ["/sign-in"],
         produces = [APPLICATION_JSON]
     )
     @Operation(
@@ -386,7 +385,7 @@ class AuthController {
     }
 
     @PutMapping(
-        value = ["/refresh/{email}"],
+        value = ["/refresh-token/{email}"],
         consumes = [APPLICATION_JSON],
         produces = [APPLICATION_JSON]
     )

@@ -97,7 +97,7 @@ class AuthService {
         }
     }
 
-    fun checkCodeSendToConfirmEmail(code: String) {
+    fun checkCodeVerification(code: String) {
         val entity: Security? = securityRepository.checkCodeSend(code = code)
         entity?.let {
             if (it.expiration.isBefore(LocalDateTime.now())) {

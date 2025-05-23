@@ -51,14 +51,13 @@ class SecurityConfig {
                 authorize
                     .requestMatchers(
                         "/api/auth/v1/confirm-email-address",
-                        "/api/auth/v1/check-code-existent/{code}",
-                        "/api/auth/v1/update-code-verification-email/{email}",
-                        "/api/auth/v1/signUp",
-                        "/api/auth/v1/signIn",
+                        "/api/auth/v1/check-code-verification/{code}",
+                        "/api/auth/v1/sign-up",
+                        "/api/auth/v1/sign-in",
                         "/api/auth/v1/recover-password",
                         "/api/auth/v1/check-recover-password/{code}",
                         "/api/auth/v1/new-password",
-                        "/api/auth/v1/refresh/{email}",
+                        "/api/auth/v1/refresh-token/{email}",
                         "/v3/api-docs/**",
                         "/swagger-ui/**"
                     ).permitAll()
