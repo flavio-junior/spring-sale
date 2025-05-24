@@ -24,8 +24,8 @@ class JwtTokenFilter : OncePerRequestFilter() {
     ) {
         val token: String? = tokenProvider.resolveToken(request)
         try {
-            if (!token.isNullOrBlank() && tokenProvider.validateToken(token)) {
-                val auth: Authentication = tokenProvider.getAuthentication(token)
+            if (!token.isNullOrBlank() && tokenProvider.validateToken(token = token)) {
+                val auth: Authentication = tokenProvider.getAuthentication(token = token)
                 SecurityContextHolder.getContext().authentication = auth
             }
         } catch (e: TokenExpiredException) {

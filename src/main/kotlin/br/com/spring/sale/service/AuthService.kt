@@ -19,7 +19,7 @@ import br.com.spring.sale.utils.others.ConstantsUtils.SUBJECT
 import br.com.spring.sale.utils.others.ConstantsUtils.SUBJECT_RECOVER_PASSWORD
 import br.com.spring.sale.utils.others.generateCode
 import br.com.spring.sale.vo.user.EmailVO
-import br.com.spring.sale.vo.user.TokenVO
+import br.com.spring.sale.vo.user.TokenResponseVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.AuthenticationManager
@@ -122,7 +122,7 @@ class AuthService {
         }
     }
 
-    fun signIn(signInVO: SignInRequestVO): TokenVO {
+    fun signIn(signInVO: SignInRequestVO): TokenResponseVO {
         return try {
             val authentication: Authentication =
                 authenticationManager.authenticate(
@@ -205,9 +205,9 @@ class AuthService {
         } ?: throw ResourceNotFoundException(message = EMAIL_NOT_FOUND)
     }
 
-    fun refreshToken(email: String, refreshToken: String): TokenVO {
+    fun refreshToken(email: String, refreshToken: String): TokenResponseVO {
         val user: User? = userRepository.fetchByEmail(email)
-        val tokenResponse: TokenVO = if (user != null) {
+        val tokenResponse: TokenResponseVO = if (user != null) {
             tokenProvider.refreshToken(refreshToken)
         } else {
             throw UsernameNotFoundException("Username $email not found")

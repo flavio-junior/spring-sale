@@ -8,7 +8,7 @@ import br.com.spring.sale.vo.user.EmailVO
 import br.com.spring.sale.vo.user.NewPasswordVO
 import br.com.spring.sale.vo.user.SignInRequestVO
 import br.com.spring.sale.vo.user.SignUpVO
-import br.com.spring.sale.vo.user.TokenVO
+import br.com.spring.sale.vo.user.TokenResponseVO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
@@ -196,7 +196,7 @@ class AuthController {
         responses = [
             ApiResponse(
                 description = "Success", responseCode = "200", content = [
-                    Content(schema = Schema(implementation = TokenVO::class))
+                    Content(schema = Schema(implementation = TokenResponseVO::class))
                 ]
             ),
             ApiResponse(
@@ -223,7 +223,7 @@ class AuthController {
     )
     fun signIn(
         @RequestBody signInVO: SignInRequestVO
-    ): ResponseEntity<TokenVO> {
+    ): ResponseEntity<TokenResponseVO> {
         require(
             value = signInVO.email.isNotEmpty() && signInVO.email.isNotBlank() &&
                     signInVO.password.isNotEmpty() && signInVO.password.isNotBlank()
@@ -396,7 +396,7 @@ class AuthController {
         responses = [
             ApiResponse(
                 description = "Success", responseCode = "200", content = [
-                    Content(schema = Schema(implementation = TokenVO::class))
+                    Content(schema = Schema(implementation = TokenResponseVO::class))
                 ]
             ),
             ApiResponse(
@@ -429,7 +429,7 @@ class AuthController {
     fun refreshToken(
         @PathVariable(value = "email") email: String,
         @RequestHeader(value = "Authorization") refreshToken: String,
-    ): ResponseEntity<TokenVO> {
+    ): ResponseEntity<TokenResponseVO> {
         return ResponseEntity.ok(authService.refreshToken(email = email, refreshToken = refreshToken))
     }
 }

@@ -2,8 +2,9 @@ package br.com.spring.sale.security
 
 import br.com.spring.sale.exceptions.InvalidJwtAuthenticationException
 import br.com.spring.sale.utils.common.TypeAccount
+import br.com.spring.sale.utils.common.getLocalDateTime
 import br.com.spring.sale.utils.others.toDate
-import br.com.spring.sale.vo.user.TokenVO
+import br.com.spring.sale.vo.user.TokenResponseVO
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
@@ -22,7 +23,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.*
 
 @Service
@@ -31,8 +31,8 @@ class JwtTokenProvider {
     @Value("\${security.jwt.token.secret-key:secret}")
     private var secretKey = "secret"
 
-    @Value("\${security.jwt.token.expire-length:3600000}")
-    private var validityInMilliseconds: Long = 3_600_000
+    @Value("\${security.jwt.token.expires-at}")
+    private var tokenExpiresAt: Long = 0
 
     @Autowired
     private lateinit var userDetailsService: UserDetailsService
@@ -44,33 +44,55 @@ class JwtTokenProvider {
         algorithm = Algorithm.HMAC256(secretKey.toByteArray())
     }
 
-    fun createAccessToken(username: String, typeAccount: TypeAccount): TokenVO {
-        val now = LocalDateTime.now().withNano(0)
-        val validity = now.plus(validityInMilliseconds, ChronoUnit.MILLIS).withNano(0)
+    fun createAccessToken(
+        username: String, typeAccount: TypeAccount
+    ): TokenResponseVO {
+        val currentLocalDateTime = getLocalDateTime()
+        val validity = currentLocalDateTime.plusDays(tokenExpiresAt)
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-        val createdFormatted = now.format(formatter)
-        val expirationFormatted = validity.format(formatter)
-        val accessToken = getAccessToken(username, typeAccount, now, validity)
-        val refreshToken = getRefreshToken(username, typeAccount, now)
-        return TokenVO(
-            user = username,
-            authenticated = true,
-            type = typeAccount,
-            accessToken = accessToken,
-            refreshToken = refreshToken,
-            created = createdFormatted,
-            expiration = expirationFormatted
+        return TokenResponseVO(
+            expiration = validity.format(formatter),
+            accessToken = getAccessToken(
+                username = username,
+                typeAccount = typeAccount,
+                now = currentLocalDateTime,
+                validity = validity
+            ),
+            refreshToken = getRefreshToken(
+                username = username,
+                typeAccount = typeAccount,
+                now = currentLocalDateTime
+            )
         )
     }
 
-    fun refreshToken(refreshToken: String): TokenVO {
-        var token: String = ""
-        if (refreshToken.contains("Bearer ")) token = refreshToken.substring("Bearer ".length)
+    fun refreshToken(
+        refreshToken: String
+    ): TokenResponseVO {
+        var token = ""
+        if (refreshToken.contains(other = "Bearer ")) token = refreshToken.substring(startIndex = "Bearer ".length)
         val verifier: JWTVerifier = JWT.require(algorithm).build()
         val decodedJWT: DecodedJWT = verifier.verify(token)
         val username: String = decodedJWT.subject
         val typeAccount: TypeAccount = decodedJWT.getClaim("type_account").`as`(TypeAccount::class.java)
-        return createAccessToken(username, typeAccount)
+        val currentLocalDateTime = getLocalDateTime()
+        val validity = currentLocalDateTime.plusDays(tokenExpiresAt)
+        val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+        val expirationFormatted = validity.format(formatter)
+        return TokenResponseVO(
+            expiration = expirationFormatted,
+            accessToken = getAccessToken(
+                username = username,
+                typeAccount = typeAccount,
+                now = currentLocalDateTime,
+                validity = validity
+            ),
+            refreshToken = getRefreshToken(
+                username = username,
+                typeAccount = typeAccount,
+                now = currentLocalDateTime
+            )
+        )
     }
 
     fun getAccessToken(
@@ -90,51 +112,63 @@ class JwtTokenProvider {
             .trim()
     }
 
-    fun getRefreshToken(username: String, typeAccount: TypeAccount, now: LocalDateTime): String {
-        val validRefreshToken = now.plus(validityInMilliseconds * 3, ChronoUnit.MILLIS)
+    fun getRefreshToken(
+        username: String,
+        typeAccount: TypeAccount,
+        now: LocalDateTime
+    ): String {
+        val createdNewPasswordVORefreshToken = now.plusDays(tokenExpiresAt)
             .atZone(ZoneId.systemDefault())
             .toInstant()
             .let { Date.from(it) }
         return JWT.create()
             .withClaim("type_account", typeAccount.toString())
-            .withExpiresAt(validRefreshToken)
+            .withExpiresAt(createdNewPasswordVORefreshToken)
             .withSubject(username)
             .sign(algorithm)
             .trim()
     }
 
-    fun getAuthentication(token: String): Authentication {
+    fun getAuthentication(
+        token: String
+    ): Authentication {
         val decodedJWT: DecodedJWT = decodedToken(token)
         val userDetails: UserDetails = userDetailsService.loadUserByUsername(decodedJWT.subject)
         return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
     }
 
-    fun decodedToken(token: String): DecodedJWT {
+    fun decodedToken(
+        token: String
+    ): DecodedJWT {
         val algorithm = Algorithm.HMAC256(secretKey.toByteArray())
         val verify: JWTVerifier = JWT.require(algorithm).build()
         return verify.verify(token)
     }
 
-    fun resolveToken(req: HttpServletRequest): String? {
-        val bearerToken = req.getHeader("Authorization")
-        return if (!bearerToken.isNullOrBlank() && bearerToken.startsWith("Bearer ")) {
-            bearerToken.substring("Bearer ".length)
+    fun resolveToken(
+        httpServletRequest: HttpServletRequest
+    ): String? {
+        val bearerToken = httpServletRequest.getHeader("Authorization")
+        return if (!bearerToken.isNullOrBlank() && bearerToken.startsWith(prefix = "Bearer ")) {
+            bearerToken.substring(startIndex = "Bearer ".length)
         } else {
             null
         }
     }
 
-    fun validateToken(token: String): Boolean {
+    fun validateToken(
+        token: String
+    ): Boolean {
         try {
             val decodedJWT = decodedToken(token)
             if (decodedJWT.expiresAt.before(Date())) {
-                throw InvalidJwtAuthenticationException("Token has expired")
+                throw InvalidJwtAuthenticationException(exception = "Token has expired")
             }
             return true
         } catch (e: TokenExpiredException) {
             throw e
         } catch (e: Exception) {
-            throw InvalidJwtAuthenticationException("Expired or invalid JWT token!")
+            throw InvalidJwtAuthenticationException(exception = "Expired or invalid JWT token!")
         }
     }
 }
