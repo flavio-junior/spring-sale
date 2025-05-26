@@ -37,6 +37,22 @@ class CategoryService {
     }
 
     @Transactional(readOnly = true)
+    fun findCategoryByName(
+        user: User,
+        name: String
+    ): List<CategoryResponseVO> {
+        val companySaved = companyService.getCompanyByUserLogged(user = user)
+        val products: List<Category> = categoryRepository.findCategoryByName(companyId = companySaved.id, name = name)
+        if (products.isNotEmpty()) {
+            return products.map { product ->
+                parseObject(origin = product, destination = CategoryResponseVO::class.java)
+            }
+        } else {
+            throw ResourceNotFoundException(message = CATEGORY_NOT_FOUND)
+        }
+    }
+
+    @Transactional(readOnly = true)
     fun findCategoryById(
         user: User,
         categoryId: Long
