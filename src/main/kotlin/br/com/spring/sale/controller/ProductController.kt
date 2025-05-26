@@ -204,10 +204,7 @@ class ProductController {
         return ResponseEntity.created(uri).body(entity)
     }
 
-    @PutMapping(
-        value = ["/{id}"],
-        produces = [APPLICATION_JSON]
-    )
+    @PutMapping(produces = [APPLICATION_JSON])
     @Operation(
         summary = "Update Product",
         description = "Update Product",
