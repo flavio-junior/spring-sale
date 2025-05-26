@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS tb_user (
     created_at TIMESTAMP NOT NULL,
     name VARCHAR(255),
     surname VARCHAR(255),
+    username VARCHAR(20) NULL UNIQUE,
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255) NOT NULL UNIQUE,
     type_account VARCHAR(10) NOT NULL,

@@ -32,6 +32,9 @@ class User : UserDetails {
     var name: String = ""
     var surname: String = ""
 
+    @Column(name = "username", nullable = false, unique = true)
+    var userName: String? = ""
+
     @Column(unique = true)
     var email: String = ""
 
