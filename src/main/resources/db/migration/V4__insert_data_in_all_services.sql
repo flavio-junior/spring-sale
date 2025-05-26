@@ -1,15 +1,17 @@
 INSERT INTO
-    tb_company (identifier, date, hour, name)
+    tb_company(identifier, date, hour, name)
 VALUES
     (1741166726157, CURRENT_DATE, CURRENT_TIME, 'Lanchonete Frango Assado'),
     (1741166736984, CURRENT_DATE, CURRENT_TIME, 'Polly Açai');
 
 INSERT INTO
-    tb_user_company (fk_company, fk_user)
+    tb_user_company(fk_company, fk_user)
 VALUES
     (1, 1);
 
-INSERT INTO tb_category (name) VALUES
+INSERT INTO
+    tb_category(name)
+VALUES
    ('Hortifrúti'),
    ('Carnes e Aves'),
    ('Peixaria'),
@@ -27,7 +29,7 @@ INSERT INTO tb_category (name) VALUES
    ('Bebê e Infantil');
 
 INSERT INTO
-    tb_company_category (fk_company, fk_category)
+    tb_company_category(fk_company, fk_category)
 VALUES
     (1, 1),
     (1, 2),
@@ -44,3 +46,105 @@ VALUES
     (1, 13),
     (1, 14),
     (1, 15);
+
+INSERT INTO
+    tb_product(created_at, name, price, stock_quantity)
+VALUES
+    (DATE_TRUNC('second', NOW()), 'Banana Nanica', 3.50, 120),
+    (DATE_TRUNC('second', NOW()), 'Maçã Gala', 6.99, 80),
+    (DATE_TRUNC('second', NOW()), 'Frango Congelado Sadia 1kg', 12.90, 50),
+    (DATE_TRUNC('second', NOW()), 'Carne Moída Friboi 1kg', 29.90, 40),
+    (DATE_TRUNC('second', NOW()), 'Filé de Merluza Copacol 800g', 22.90, 30),
+    (DATE_TRUNC('second', NOW()), 'Camarão Cinza 400g Qualitá', 36.50, 20),
+    (DATE_TRUNC('second', NOW()), 'Pão Francês', 12.00, 100),
+    (DATE_TRUNC('second', NOW()), 'Bolo de Chocolate Panco 400g', 9.90, 25),
+    (DATE_TRUNC('second', NOW()), 'Presunto Sadia Fatiado 200g', 8.90, 60),
+    (DATE_TRUNC('second', NOW()), 'Queijo Mussarela Itambé 500g', 18.90, 40),
+    (DATE_TRUNC('second', NOW()), 'Coca-Cola 2L', 9.50, 70),
+    (DATE_TRUNC('second', NOW()), 'Suco Natural One Laranja 900ml', 7.90, 30),
+    (DATE_TRUNC('second', NOW()), 'Arroz Tio João 5kg', 22.00, 100),
+    (DATE_TRUNC('second', NOW()), 'Feijão Carioca Camil 1kg', 6.80, 80),
+    (DATE_TRUNC('second', NOW()), 'Sabão em Pó Omo Lavagem Perfeita 800g', 10.90, 50),
+    (DATE_TRUNC('second', NOW()), 'Desinfetante Veja 500ml', 4.99, 60),
+    (DATE_TRUNC('second', NOW()), 'Shampoo Seda Liso Perfeito 325ml', 9.50, 45),
+    (DATE_TRUNC('second', NOW()), 'Papel Higiênico Neve 12 unid.', 18.90, 40),
+    (DATE_TRUNC('second', NOW()), 'Ração Golden Formula Cães Adultos 3kg', 55.00, 25),
+    (DATE_TRUNC('second', NOW()), 'Areia Higiênica Pipicat 4kg', 18.50, 30),
+    (DATE_TRUNC('second', NOW()), 'Milho Verde Quero 200g', 3.20, 70),
+    (DATE_TRUNC('second', NOW()), 'Sardinha Coqueiro 125g', 5.50, 50),
+    (DATE_TRUNC('second', NOW()), 'Biscoito Oreo 90g', 3.90, 100),
+    (DATE_TRUNC('second', NOW()), 'Chips Batata Ruffles 55g', 6.90, 80),
+    (DATE_TRUNC('second', NOW()), 'Pizza Seara Calabresa 460g', 16.90, 35),
+    (DATE_TRUNC('second', NOW()), 'Lasanha Sadia Bolonhesa 600g', 17.90, 40),
+    (DATE_TRUNC('second', NOW()), 'Granola Mãe Terra 250g', 11.50, 30),
+    (DATE_TRUNC('second', NOW()), 'Chá Verde Leão 24 sachês', 8.50, 25),
+    (DATE_TRUNC('second', NOW()), 'Fralda Pampers Confort Sec G 20 unid.', 29.90, 30),
+    (DATE_TRUNC('second', NOW()), 'Lenço Umedecido Huggies 48 unid.', 9.90, 50);
+
+INSERT INTO
+    tb_company_product(fk_company, fk_product)
+VALUES
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (1, 4),
+    (1, 5),
+    (1, 6),
+    (1, 7),
+    (1, 8),
+    (1, 9),
+    (1, 10),
+    (1, 11),
+    (1, 12),
+    (1, 13),
+    (1, 14),
+    (1, 15),
+    (1, 16),
+    (1, 17),
+    (1, 18),
+    (1, 19),
+    (1, 20),
+    (1, 21),
+    (1, 22),
+    (1, 23),
+    (1, 24),
+    (1, 25),
+    (1, 26),
+    (1, 27),
+    (1, 28),
+    (1, 29),
+    (1, 30);
+
+INSERT INTO
+    tb_product_category(fk_product, fk_category)
+VALUES
+    (1, 1),
+    (2, 1),
+    (3, 2),
+    (4, 2),
+    (5, 3),
+    (6, 3),
+    (7, 4),
+    (8, 4),
+    (9, 5),
+    (10, 5),
+    (11, 6),
+    (12, 6),
+    (13, 7),
+    (14, 7),
+    (15, 8),
+    (16, 8),
+    (17, 9),
+    (18, 9),
+    (19, 10),
+    (20, 10),
+    (21, 11),
+    (22, 11),
+    (23, 12),
+    (24, 12),
+    (25, 13),
+    (26, 13),
+    (27, 14),
+    (28, 14),
+    (29, 15),
+    (30, 15);
