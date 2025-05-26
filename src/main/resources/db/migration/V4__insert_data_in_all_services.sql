@@ -7,5 +7,4 @@ VALUES
 INSERT INTO
     tb_user_company (fk_company, fk_user)
 VALUES
-    (1, 1),
-    (2, 2);
+    (1, 1);
