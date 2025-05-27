@@ -12,10 +12,14 @@ import java.time.LocalDateTime
 interface SecurityRepository : JpaRepository<Security?, Long?> {
 
     @Query(value = "SELECT s FROM Security s WHERE s.code =:code")
-    fun checkCodeSend(@Param(value = "code") code: String?): Security?
+    fun checkCodeSend(
+        @Param(value = "code") code: String?
+    ): Security?
 
     @Query(value = "SELECT s FROM Security s WHERE s.email =:email")
-    fun checkEmailAlreadyExists(@Param(value = "email") email: String): Int?
+    fun checkEmailAlreadyExists(
+        @Param(value = "email") email: String
+    ): Security?
 
     @Modifying
     @Query(value = "UPDATE Security s SET s.code =:code, s.expiration =:expiration WHERE s.email =:email")

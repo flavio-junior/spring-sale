@@ -68,8 +68,8 @@ class AuthService {
         if (checkUserAlreadyExists != null) {
             throw ObjectDuplicateException(message = EMAIL_DUPLICATE_EXCEPTION)
         } else {
-            val checkEmailAlreadyExists: Int? = securityRepository.checkEmailAlreadyExists(email = emailVO.email)
-            if (checkEmailAlreadyExists == 1) {
+            val checkEmailAlreadyExists: Security? = securityRepository.checkEmailAlreadyExists(email = emailVO.email)
+            if (checkEmailAlreadyExists != null) {
                 val code = generateCode()
                 securityRepository.updateCodeVerificationEmail(
                     code = code,
