@@ -16,6 +16,11 @@ interface UserRepository : JpaRepository<User?, Long?> {
     @Query(value = "SELECT u FROM User u WHERE u.email =:email")
     fun fetchByEmail(email: String?): User?
 
+    @Query(value = "SELECT u FROM User u WHERE u.id =:id")
+    fun findUserById(
+        @Param(value = "id") userId: Long? = null
+    ): User?
+
     @Query(value = "SELECT s FROM User s WHERE s.userName = :username")
     fun checkUsernameAlreadyExisting(
         @Param(value = "username") username: String
@@ -28,19 +33,5 @@ interface UserRepository : JpaRepository<User?, Long?> {
         @Param(value = "name") name: String,
         @Param(value = "surname") surname: String,
         @Param(value = "username") username: String
-    )
-
-    @Modifying
-    @Query(value = "UPDATE User u SET u.enabled = false WHERE u.id =:id AND u.email =:email")
-    fun disabledProfileEmployee(
-        @Param(value = "id") userId: Long,
-        @Param(value = "email") email: String
-    )
-
-    @Modifying
-    @Query(value = "UPDATE User u SET u.enabled = true WHERE u.id =:id AND u.email =:email")
-    fun enabledProfileEmployee(
-        @Param(value = "id") userId: Long,
-        @Param(value = "email") email: String
     )
 }

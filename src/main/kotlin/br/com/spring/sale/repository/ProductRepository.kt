@@ -12,51 +12,51 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ProductRepository : JpaRepository<Product, Long> {
 
-    @Query("SELECT p FROM Product p WHERE p.company.id = :companyId AND p.name = :name")
+    @Query(value = "SELECT p FROM Product p WHERE p.user.id = :userId AND p.name = :name")
     fun checkNameProductAlreadyExists(
-        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "userId") userId: Long? = null,
         @Param(value = "name") name: String
     ): Product?
 
     @Query(
         value = """
         SELECT p FROM Product p
-            WHERE p.company.id = :companyId
+            WHERE p.user.id = :userId
         AND (:name IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')))
     """
     )
     fun findAllProducts(
-        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "userId") userId: Long? = null,
         @Param(value = "name") name: String?,
         pageable: Pageable
     ): Page<Product>?
 
-    @Query(value = "SELECT p FROM Product p WHERE p.company.id = :companyId AND p.id = :productId")
+    @Query(value = "SELECT p FROM Product p WHERE p.user.id = :userId AND p.id = :productId")
     fun findProductById(
-        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "userId") userId: Long? = null,
         @Param(value = "productId") productId: Long
     ): Product?
 
     @Modifying
-    @Query(value = "UPDATE Product p SET p.price =:price WHERE p.company.id = :companyId AND p.id =:id")
+    @Query(value = "UPDATE Product p SET p.price =:price WHERE p.user.id = :userId AND p.id =:productId")
     fun updatePriceProduct(
-        @Param(value = "companyId") companyId: Long? = null,
-        @Param(value = "id") idProduct: Long,
+        @Param(value = "userId") userId: Long? = null,
+        @Param(value = "productId") productId: Long,
         @Param(value = "price") price: Double
     )
 
     @Modifying
-    @Query(value = "UPDATE Product p SET p.quantity = p.quantity + :quantity WHERE p.company.id = :companyId AND p.id = :id")
+    @Query(value = "UPDATE Product p SET p.quantity = p.quantity + :quantity WHERE p.user.id = :userId AND p.id = :productId")
     fun restockProduct(
-        @Param(value = "companyId") companyId: Long? = null,
-        @Param(value = "id") idProduct: Long,
+        @Param(value = "userId") userId: Long? = null,
+        @Param(value = "productId") productId: Long,
         @Param(value = "quantity") quantity: Int
     )
 
     @Modifying
-    @Query(value = "DELETE FROM Product p WHERE p.id = :productId AND p.company.id = :companyId")
+    @Query(value = "DELETE FROM Product p WHERE p.id = :productId AND p.user.id = :userId")
     fun deleteProductById(
-        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "userId") userId: Long? = null,
         @Param(value = "productId") productId: Long
     ): Int
 }

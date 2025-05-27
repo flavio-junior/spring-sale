@@ -28,7 +28,7 @@ class ProductService {
     private lateinit var categoryService: CategoryService
 
     @Autowired
-    private lateinit var companyService: CompanyService
+    private lateinit var userService: UserService
 
     @Transactional(readOnly = true)
     fun findAllProducts(
@@ -36,9 +36,8 @@ class ProductService {
         name: String?,
         pageable: Pageable
     ): Page<ProductResponseVO> {
-        val companySaved = companyService.getCompanyByUserLogged(user = user)
         val products: Page<Product>? =
-            productRepository.findAllProducts(companyId = companySaved.id, name = name, pageable = pageable)
+            productRepository.findAllProducts(userId = user.id, name = name, pageable = pageable)
         return products?.map { product -> parseObject(origin = product, destination = ProductResponseVO::class.java) }
             ?: throw ResourceNotFoundException(message = PRODUCT_NOT_FOUND)
     }
@@ -56,9 +55,8 @@ class ProductService {
         user: User,
         productId: Long
     ): Product {
-        val companySaved = companyService.getCompanyByUserLogged(user = user)
         val productSaved: Product? =
-            productRepository.findProductById(companyId = companySaved.id, productId = productId)
+            productRepository.findProductById(userId = user.id, productId = productId)
         if (productSaved != null) {
             return productSaved
         } else {
@@ -76,7 +74,7 @@ class ProductService {
             productResult.categories =
                 categoryService.converterCategories(user = user, categories = product.categories)
             productResult.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
-            productResult.company = companyService.getCompanyByUserLogged(user = user)
+            productResult.user = userService.findUserById(userId = user.id)
             return parseObject(
                 origin = productRepository.save(productResult),
                 destination = ProductResponseVO::class.java
@@ -90,8 +88,7 @@ class ProductService {
         user: User,
         name: String
     ): Boolean {
-        val companySaved = companyService.getCompanyByUserLogged(user = user)
-        val productResult = productRepository.checkNameProductAlreadyExists(companyId = companySaved.id, name = name)
+        val productResult = productRepository.checkNameProductAlreadyExists(userId = user.id, name = name)
         return productResult != null
     }
 
@@ -108,7 +105,10 @@ class ProductService {
                 categoryService.converterCategories(user = user, categories = product.categories)
             productSaved.price = product.price
             productSaved.quantity = product.quantity
-            return parseObject(origin = productRepository.save(productSaved), destination = ProductResponseVO::class.java)
+            return parseObject(
+                origin = productRepository.save(productSaved),
+                destination = ProductResponseVO::class.java
+            )
         } else {
             throw ObjectDuplicateException(message = DUPLICATE_NAME_PRODUCT)
         }
@@ -122,8 +122,8 @@ class ProductService {
     ) {
         val productSaved = getProduct(user = user, productId = productId)
         productRepository.updatePriceProduct(
-            companyId = productSaved.company?.id,
-            idProduct = productSaved.id,
+            userId = user.id,
+            productId = productSaved.id,
             price = price.price
         )
     }
@@ -136,8 +136,8 @@ class ProductService {
     ) {
         val productSaved = getProduct(user = user, productId = productId)
         productRepository.restockProduct(
-            companyId = productSaved.company?.id,
-            idProduct = productSaved.id,
+            userId = user.id,
+            productId = productSaved.id,
             quantity = restockProduct.quantity
         )
     }
@@ -149,7 +149,7 @@ class ProductService {
     ) {
         val productSaved = getProduct(user = user, productId = productId)
         productSaved.categories = null
-        productRepository.deleteProductById(companyId = productSaved.company?.id, productId = productId)
+        productRepository.deleteProductById(userId = user.id, productId = productId)
     }
 
     companion object {

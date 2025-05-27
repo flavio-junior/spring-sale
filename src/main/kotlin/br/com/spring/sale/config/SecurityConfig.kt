@@ -63,8 +63,6 @@ class SecurityConfig {
                     ).permitAll()
                     .requestMatchers("/api/spring/sale/categories/v1/**").hasRole("ADMIN")
                     .requestMatchers("/api/spring/sale/products/v1/**").hasRole("ADMIN")
-                    .requestMatchers("/api/spring/sale/companies/v1/**").hasRole("ADMIN")
-                    .requestMatchers("/api/spring/sale/employees/v1/**").hasRole("ADMIN")
                     .requestMatchers("/api/spring/sale/use/settings/v1/**").authenticated()
                     .anyRequest().authenticated()
             }

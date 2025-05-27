@@ -1,15 +1,4 @@
 INSERT INTO
-    tb_company(identifier, date, hour, name)
-VALUES
-    (1741166726157, CURRENT_DATE, CURRENT_TIME, 'Lanchonete Frango Assado'),
-    (1741166736984, CURRENT_DATE, CURRENT_TIME, 'Polly Açai');
-
-INSERT INTO
-    tb_user_company(fk_company, fk_user)
-VALUES
-    (1, 1);
-
-INSERT INTO
     tb_category(name)
 VALUES
    ('Hortifrúti'),
@@ -29,7 +18,7 @@ VALUES
    ('Bebê e Infantil');
 
 INSERT INTO
-    tb_company_category(fk_company, fk_category)
+    tb_user_category(fk_user, fk_category)
 VALUES
     (1, 1),
     (1, 2),
@@ -82,7 +71,7 @@ VALUES
     (DATE_TRUNC('second', NOW()), 'Lenço Umedecido Huggies 48 unid.', 9.90, 50);
 
 INSERT INTO
-    tb_company_product(fk_company, fk_product)
+    tb_user_product(fk_user, fk_product)
 VALUES
     (1, 1),
     (1, 2),

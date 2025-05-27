@@ -1,8 +1,6 @@
 package br.com.spring.sale.entity.user
 
-import br.com.spring.sale.entity.employee.Employee
 import br.com.spring.sale.utils.common.TypeAccount
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -10,9 +8,6 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -56,14 +51,6 @@ class User : UserDetails {
 
     @Column(name = "enabled")
     var enabled: Boolean = true
-
-    @ManyToOne(cascade = [CascadeType.ALL])
-    @JoinTable(
-        name = "tb_user_employee",
-        joinColumns = [JoinColumn(name = "fk_user", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "fk_employee", referencedColumnName = "id")]
-    )
-    var employee: Employee? = null
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         if (this.typeAccount == TypeAccount.ADMIN) {

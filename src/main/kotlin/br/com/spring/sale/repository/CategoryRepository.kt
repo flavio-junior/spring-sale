@@ -12,43 +12,43 @@ import org.springframework.stereotype.Repository
 @Repository
 interface CategoryRepository : JpaRepository<Category, Long?> {
 
-    @Query(value = "SELECT c FROM Category c WHERE c.company.id = :companyId AND c.name = :name")
+    @Query(value = "SELECT c FROM Category c WHERE c.user.id = :userId AND c.name = :name")
     fun checkNameCategoryAlreadyExists(
-        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "userId") userId: Long? = null,
         @Param(value = "name") name: String
     ): Category?
 
     @Query(
         value = """
         SELECT c FROM Category c
-            WHERE c.company.id = :companyId
+            WHERE c.user.id = :userId
         AND (:name IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%')))
     """
     )
     fun findAllCategories(
-        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "userId") userId: Long? = null,
         @Param(value = "name") name: String?,
         pageable: Pageable
     ): Page<Category>
 
     @Query(
-        value = "SELECT c FROM Category c WHERE c.company.id = :companyId AND LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))"
+        value = "SELECT c FROM Category c WHERE c.user.id = :userId AND LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))"
     )
     fun findCategoryByName(
-        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "userId") userId: Long? = null,
         @Param(value = "name") name: String?
     ): List<Category>
 
-    @Query(value = "SELECT c FROM Category c WHERE c.company.id = :companyId AND c.id = :idCategory")
+    @Query(value = "SELECT c FROM Category c WHERE c.user.id = :userId AND c.id = :idCategory")
     fun findCategoryById(
-        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "userId") userId: Long? = null,
         @Param(value = "idCategory") categoryId: Long
     ): Category?
 
     @Modifying
-    @Query(value = "DELETE FROM Category c WHERE c.id = :categoryId AND c.company.id = :companyId")
+    @Query(value = "DELETE FROM Category c WHERE c.id = :categoryId AND c.user.id = :userId")
     fun deleteCategoryById(
-        @Param(value = "companyId") companyId: Long? = null,
+        @Param(value = "userId") userId: Long? = null,
         @Param(value = "categoryId") categoryId: Long
     ): Int
 }

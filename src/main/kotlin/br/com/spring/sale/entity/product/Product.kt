@@ -1,7 +1,7 @@
 package br.com.spring.sale.entity.product
 
 import br.com.spring.sale.entity.category.Category
-import br.com.spring.sale.entity.company.Company
+import br.com.spring.sale.entity.user.User
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -37,9 +37,9 @@ data class Product(
     var quantity: Int? = 0,
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinTable(
-        name = "tb_company_product",
+        name = "tb_user_product",
         joinColumns = [JoinColumn(name = "fk_product", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "fk_company", referencedColumnName = "id")]
+        inverseJoinColumns = [JoinColumn(name = "fk_user", referencedColumnName = "id")]
     )
-    var company: Company? = null
+    var user: User? = null
 )

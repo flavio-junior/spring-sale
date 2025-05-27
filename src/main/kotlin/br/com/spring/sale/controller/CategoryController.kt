@@ -5,7 +5,6 @@ import br.com.spring.sale.exceptions.ForbiddenActionRequestException
 import br.com.spring.sale.service.CategoryService
 import br.com.spring.sale.utils.others.ConstantsUtils.EMPTY_FIELDS
 import br.com.spring.sale.utils.others.MediaType.APPLICATION_JSON
-import br.com.spring.sale.utils.others.MediaType.APPLICATION_MULTI_PART
 import br.com.spring.sale.vo.category.CategoryResponseVO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -245,8 +244,6 @@ class CategoryController {
     }
 
     @PutMapping(
-        value = ["/{id}"],
-        consumes = [APPLICATION_MULTI_PART],
         produces = [APPLICATION_JSON]
     )
     @Operation(

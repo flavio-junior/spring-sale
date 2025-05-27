@@ -25,6 +25,12 @@ class UserService : UserDetailsService {
         return user ?: throw UsernameNotFoundException("$username not found")
     }
 
+    fun findUserById(
+        userId: Long
+    ): User? {
+        return userRepository.findUserById(userId = userId) ?: throw ResourceNotFoundException(message = USER_NOT_FOUND)
+    }
+
     fun findUserAuthenticated(
         user: User
     ): UserAuthenticatedVO {
@@ -48,30 +54,6 @@ class UserService : UserDetailsService {
                 username = info.username
             )
         }
-    }
-
-    fun findUserById(
-        userId: Long
-    ): User? {
-        return userRepository.findById(userId).orElseThrow {
-            throw ResourceNotFoundException(message = USER_NOT_FOUND)
-        }
-    }
-
-    @Transactional
-    fun disabledProfileEmployee(
-        userId: Long,
-        email: String
-    ) {
-        userRepository.disabledProfileEmployee(userId = userId, email = email)
-    }
-
-    @Transactional
-    fun enabledProfileEmployee(
-        userId: Long,
-        email: String
-    ) {
-        userRepository.enabledProfileEmployee(userId = userId, email = email)
     }
 
     @Transactional
