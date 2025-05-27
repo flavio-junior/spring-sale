@@ -1,6 +1,5 @@
 package br.com.spring.sale.service
 
-import br.com.spring.sale.vo.employee.RegisterEmployeeRequestVO
 import br.com.spring.sale.entity.employee.Employee
 import br.com.spring.sale.entity.user.User
 import br.com.spring.sale.exceptions.InternalErrorClient
@@ -8,10 +7,10 @@ import br.com.spring.sale.exceptions.ResourceNotFoundException
 import br.com.spring.sale.repository.EmployeeRepository
 import br.com.spring.sale.utils.common.StatusEmployee
 import br.com.spring.sale.utils.common.TypeAccount
-import br.com.spring.sale.utils.others.ConverterUtils.parseListObjects
 import br.com.spring.sale.utils.others.ConverterUtils.parseObject
 import br.com.spring.sale.vo.employee.EmployeeResponseVO
-import br.com.spring.sale.vo.user.SignUpVO
+import br.com.spring.sale.vo.employee.RegisterEmployeeRequestVO
+import br.com.spring.sale.vo.user.EmployeeSignUpVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -88,7 +87,7 @@ class EmployeeService {
         createNewEmployee.status = StatusEmployee.ENABLED
         createNewEmployee.company = companyService.getCompanyByUserLogged(user = user)
         employeeRepository.save(createNewEmployee)
-        val createAccountToEmployee = SignUpVO(
+        val createAccountToEmployee = EmployeeSignUpVO(
             name = employee.name,
             surname = employee.surname,
             email = employee.email,
@@ -96,7 +95,7 @@ class EmployeeService {
             type = TypeAccount.USER,
             employee = createNewEmployee
         )
-        authService.signUp(data = createAccountToEmployee)
+        //authService.signUp(data = createAccountToEmployee)
     }
 
     @Transactional

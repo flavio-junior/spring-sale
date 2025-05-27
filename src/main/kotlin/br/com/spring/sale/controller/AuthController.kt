@@ -177,7 +177,6 @@ class AuthController {
         require(
             value = signUpVO.email.isNotEmpty() && signUpVO.email.isNotBlank()
                     && signUpVO.password.isNotEmpty() && signUpVO.password.isNotBlank()
-                    && signUpVO.type != null
         ) {
             throw ForbiddenActionRequestException(exception = EMPTY_FIELDS)
         }

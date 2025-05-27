@@ -13,6 +13,7 @@ import br.com.spring.sale.exceptions.ResourceNotFoundException
 import br.com.spring.sale.repository.RecoverPasswordRepository
 import br.com.spring.sale.repository.SecurityRepository
 import br.com.spring.sale.repository.UserRepository
+import br.com.spring.sale.utils.common.TypeAccount
 import br.com.spring.sale.utils.others.ConstantsUtils.BODY
 import br.com.spring.sale.utils.others.ConstantsUtils.EXPIRED_CODE
 import br.com.spring.sale.utils.others.ConstantsUtils.SUBJECT
@@ -113,11 +114,10 @@ class AuthService {
         } else {
             val newUser = User()
             newUser.createdAt = Instant.now()
-            newUser.name = data.name
             newUser.surname = data.password
             newUser.email = data.email
             newUser.password = passwordEncoder.encode(data.password)
-            newUser.typeAccount = data.type
+            newUser.typeAccount = TypeAccount.ADMIN
             return userRepository.save(newUser)
         }
     }
