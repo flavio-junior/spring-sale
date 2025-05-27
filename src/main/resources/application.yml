@@ -17,8 +17,8 @@ spring:
   mail:
     host: ${EMAIL_HOST_SPRING_SALE:smtp.gmail.com}
     port: ${EMAIL_PORT_SPRING_SALE:587}
-    username: "flaviojunior.work@gmail.com"
-    password: "hmbt npba kgne uejv"
+    username: ${ACCOUNT_USERNAME_SPRING_SALE_TEST}
+    password: ${ACCOUNT_PASSWORD_SPRING_SALE_TEST}
     properties:
       mail:
         debug: false
