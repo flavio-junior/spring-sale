@@ -14,6 +14,18 @@ security:
 spring:
   application:
     name: Spring Sale
+  mail:
+    host: ${EMAIL_HOST_SPRING_SALE:smtp.gmail.com}
+    port: ${EMAIL_PORT_SPRING_SALE:587}
+    username: "flaviojunior.work@gmail.com"
+    password: "hmbt npba kgne uejv"
+    properties:
+      mail:
+        debug: false
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   jackson:
     time-zone: ${TIME_ZONE}
   profiles:

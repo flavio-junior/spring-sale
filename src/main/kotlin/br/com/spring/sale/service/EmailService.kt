@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 @Service
 class EmailService {
 
-    @Value("\${spring.mail.username}")
+    @Value(value = "\${spring.mail.username}")
     private val emailFrom: String? = null
 
     @Autowired
@@ -26,7 +26,7 @@ class EmailService {
             message.text = body
             emailSender?.send(message)
         } catch (e: MailException) {
-            throw ResourceNotFoundException("Failed to send email")
+            throw ResourceNotFoundException(message = "Failed to send email")
         }
     }
 }
