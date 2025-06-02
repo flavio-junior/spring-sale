@@ -2,12 +2,14 @@ package br.com.spring.sale.service
 
 import br.com.spring.sale.entity.category.Category
 import br.com.spring.sale.entity.user.User
+import br.com.spring.sale.exceptions.DatabaseException
 import br.com.spring.sale.exceptions.ObjectDuplicateException
 import br.com.spring.sale.exceptions.ResourceNotFoundException
 import br.com.spring.sale.repository.CategoryRepository
 import br.com.spring.sale.utils.others.ConverterUtils.parseObject
 import br.com.spring.sale.vo.category.CategoryResponseVO
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -129,8 +131,12 @@ class CategoryService {
         user: User,
         categoryId: Long
     ) {
-        val category = getCategory(user = user, categoryId = categoryId)
-        categoryRepository.deleteCategoryById(categoryId = category.id, userId = user.id)
+        try {
+            val category = getCategory(user = user, categoryId = categoryId)
+            categoryRepository.deleteCategoryById(categoryId = category.id, userId = user.id)
+        } catch (e: DataIntegrityViolationException) {
+            throw DatabaseException()
+        }
     }
 
     companion object {

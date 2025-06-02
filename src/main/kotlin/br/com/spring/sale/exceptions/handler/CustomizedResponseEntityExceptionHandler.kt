@@ -1,5 +1,6 @@
 package br.com.spring.sale.exceptions.handler
 
+import br.com.spring.sale.exceptions.DatabaseException
 import br.com.spring.sale.exceptions.ForbiddenActionRequestException
 import br.com.spring.sale.exceptions.InternalErrorClient
 import br.com.spring.sale.exceptions.InvalidJwtAuthenticationException
@@ -71,6 +72,15 @@ class CustomizedResponseEntityExceptionHandler : ResponseEntityExceptionHandler(
             message = exception.message
         )
         return ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(DatabaseException::class)
+    fun handleDatabaseException(exception: Exception): ResponseEntity<ExceptionResponse> {
+        val exceptionResponse = ExceptionResponse(
+            status = HttpStatus.FORBIDDEN.value(),
+            message = exception.message
+        )
+        return ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.CONFLICT)
     }
 
     @ExceptionHandler(ObjectDuplicateException::class)
