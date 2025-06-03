@@ -114,7 +114,6 @@ class AuthService {
         } else {
             val newUser = User()
             newUser.createdAt = Instant.now()
-            newUser.surname = data.password
             newUser.email = data.email
             newUser.password = passwordEncoder.encode(data.password)
             newUser.typeAccount = TypeAccount.ADMIN
