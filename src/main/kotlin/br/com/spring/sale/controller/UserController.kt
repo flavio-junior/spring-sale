@@ -80,7 +80,7 @@ class UserController {
         responses = [
             ApiResponse(
                 description = "Success", responseCode = "200", content = [
-                    Content(array = ArraySchema(schema = Schema(implementation = ChangeInfoUserRequestVO::class)))
+                    Content(array = ArraySchema(schema = Schema(implementation = Unit::class)))
                 ]
             ),
             ApiResponse(
