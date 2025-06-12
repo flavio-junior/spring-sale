@@ -10,6 +10,7 @@ import br.com.spring.sale.utils.others.ConverterUtils.parseObject
 import br.com.spring.sale.vo.product.ProductRequestVO
 import br.com.spring.sale.vo.product.ProductResponseVO
 import br.com.spring.sale.vo.product.RestockProductRequestVO
+import br.com.spring.sale.vo.product.UpdateProductRequestVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -95,7 +96,7 @@ class ProductService {
     @Transactional
     fun updateProduct(
         user: User,
-        product: ProductResponseVO
+        product: UpdateProductRequestVO
     ): ProductResponseVO {
         if (!checkNameProductAlreadyExists(user = user, name = product.name)) {
             val productSaved: Product = getProduct(user = user, productId = product.id)

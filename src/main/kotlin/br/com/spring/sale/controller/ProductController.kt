@@ -9,6 +9,7 @@ import br.com.spring.sale.utils.others.MediaType.APPLICATION_JSON
 import br.com.spring.sale.vo.product.ProductRequestVO
 import br.com.spring.sale.vo.product.ProductResponseVO
 import br.com.spring.sale.vo.product.RestockProductRequestVO
+import br.com.spring.sale.vo.product.UpdateProductRequestVO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
@@ -249,7 +250,7 @@ class ProductController {
     )
     fun updateProduct(
         @AuthenticationPrincipal user: User,
-        @RequestBody product: ProductResponseVO
+        @RequestBody product: UpdateProductRequestVO
     ): ProductResponseVO {
         return productService.updateProduct(user = user, product = product)
     }
