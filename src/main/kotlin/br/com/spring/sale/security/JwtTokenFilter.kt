@@ -52,6 +52,18 @@ class JwtTokenFilter : OncePerRequestFilter() {
                 """.trimIndent()
             )
             return
+        } catch (e: InvalidJwtAuthenticationException) {
+            response.contentType = "application/json"
+            response.status = HttpServletResponse.SC_FORBIDDEN
+            response.writer.write(
+                """
+                {
+                  "status": 403,
+                  "message": "${e.message}"
+                }
+                """.trimIndent()
+            )
+            return
         }
         filterChain.doFilter(request, response)
     }

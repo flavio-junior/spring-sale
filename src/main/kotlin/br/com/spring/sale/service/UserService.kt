@@ -1,6 +1,7 @@
 package br.com.spring.sale.service
 
 import br.com.spring.sale.entity.user.User
+import br.com.spring.sale.exceptions.InvalidJwtAuthenticationException
 import br.com.spring.sale.exceptions.ObjectDuplicateException
 import br.com.spring.sale.exceptions.ResourceNotFoundException
 import br.com.spring.sale.repository.UserRepository
@@ -10,7 +11,6 @@ import br.com.spring.sale.vo.user.UserAuthenticatedVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,7 +22,7 @@ class UserService : UserDetailsService {
 
     override fun loadUserByUsername(username: String?): UserDetails {
         val user: UserDetails? = userRepository.findByEmail(username)
-        return user ?: throw UsernameNotFoundException("$username not found")
+        return user ?: throw InvalidJwtAuthenticationException(exception = "$username not found")
     }
 
     fun findUserById(
