@@ -1,21 +1,33 @@
 INSERT INTO
     tb_category(name)
 VALUES
-   ('Hortifrúti'),
-   ('Carnes e Aves'),
-   ('Peixaria'),
-   ('Padaria'),
-   ('Frios e Laticínios'),
-   ('Bebidas'),
-   ('Mercearia'),
-   ('Limpeza'),
-   ('Higiene Pessoal'),
-   ('Pet Shop'),
-   ('Enlatados e Conservas'),
-   ('Biscoitos e Snacks'),
-   ('Congelados'),
-   ('Produtos Naturais'),
-   ('Bebê e Infantil');
+    ('Hortifrúti'),
+    ('Carnes e Aves'),
+    ('Peixaria'),
+    ('Padaria'),
+    ('Frios e Laticínios'),
+    ('Bebidas'),
+    ('Mercearia'),
+    ('Limpeza'),
+    ('Higiene Pessoal'),
+    ('Pet Shop'),
+    ('Enlatados e Conservas'),
+    ('Biscoitos e Snacks'),
+    ('Congelados'),
+    ('Produtos Naturais'),
+    ('Bebê e Infantil'),
+    ('Pães e Biscoitos Artesanaz'),
+    ('Carnes e Frango Congelaz'),
+    ('Bebidas Zeros e Light'),
+    ('Frios e Queijos Deliz'),
+    ('Produtos de Limpeza e Higienização'),
+    ('Doces e Sobremesas GelaZ'),
+    ('Alimentos Naturais e Orgâniz'),
+    ('Petiscos e Salgadinhos Zest'),
+    ('Produtos para Bebê Zinho'),
+    ('Massas e Molhos Zafferano'),
+    ('Laticínios e Derivaz'),
+    ('Cereais e Granolas Zuppa');
 
 INSERT INTO
     tb_user_category(fk_user, fk_category)
@@ -34,7 +46,19 @@ VALUES
     (1, 12),
     (1, 13),
     (1, 14),
-    (1, 15);
+    (1, 15),
+    (1, 16),
+    (1, 17),
+    (1, 18),
+    (1, 19),
+    (1, 20),
+    (1, 21),
+    (1, 22),
+    (1, 23),
+    (1, 24),
+    (1, 25),
+    (1, 26),
+    (1, 27);
 
 INSERT INTO
     tb_product(created_at, name, price, stock_quantity)
