@@ -2,6 +2,7 @@ package br.com.spring.sale.controller
 
 import br.com.spring.sale.entity.user.User
 import br.com.spring.sale.exceptions.ForbiddenActionRequestException
+import br.com.spring.sale.service.ProfileUserService
 import br.com.spring.sale.service.UserService
 import br.com.spring.sale.utils.others.ConstantsUtils.EMPTY_FIELDS
 import br.com.spring.sale.utils.others.MediaType.APPLICATION_JSON
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -29,6 +31,9 @@ class UserController {
 
     @Autowired
     private lateinit var userService: UserService
+
+    @Autowired
+    private lateinit var profileUserService: ProfileUserService
 
     @GetMapping(produces = [APPLICATION_JSON])
     @Operation(
@@ -127,5 +132,50 @@ class UserController {
             throw ForbiddenActionRequestException(exception = EMPTY_FIELDS)
         }
         ResponseEntity.ok(userService.changeInfoUserLogged(user = user, info = info))
+    }
+
+    @DeleteMapping(produces = [APPLICATION_JSON])
+    @Operation(
+        summary = "Delete My Account",
+        description = "Delete My Account",
+        tags = ["User"],
+        responses = [
+            ApiResponse(
+                description = "No Content", responseCode = "204", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Bad Request", responseCode = "400", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Unauthorized", responseCode = "401", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Operation Unauthorized", responseCode = "403", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Not Found", responseCode = "404", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            ),
+            ApiResponse(
+                description = "Internal Error", responseCode = "500", content = [
+                    Content(schema = Schema(implementation = Unit::class))
+                ]
+            )
+        ]
+    )
+    fun deleteMyAccount(
+        @AuthenticationPrincipal user: User
+    ): ResponseEntity<*> {
+        profileUserService.deleteMyAccount(user = user)
+        return ResponseEntity.noContent().build<Any>()
     }
 }

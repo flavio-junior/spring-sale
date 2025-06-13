@@ -127,6 +127,16 @@ class CategoryService {
     }
 
     @Transactional
+    fun deleteAllCategories(
+        user: User
+    ) {
+        val allCategories = categoryRepository.findAllCategoriesByUserLogged(userId = user.id)
+        allCategories.forEach { categorySaved ->
+            deleteCategory(user = user, categoryId = categorySaved.id)
+        }
+    }
+
+    @Transactional
     fun deleteCategory(
         user: User,
         categoryId: Long

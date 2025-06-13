@@ -56,13 +56,6 @@ class UserService : UserDetailsService {
         }
     }
 
-    @Transactional
-    fun deleteMyAccount(
-        userId: Long
-    ) {
-        userRepository.deleteById(userId)
-    }
-
     companion object {
         const val USER_NOT_FOUND = "User not found!"
         const val THE_USERNAME_ALREADY_EXISTS = "The Username Already Exists!"

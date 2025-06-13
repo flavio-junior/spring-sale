@@ -144,6 +144,16 @@ class ProductService {
     }
 
     @Transactional
+    fun deleteAllProduct(
+        user: User
+    ) {
+        val allProduct = productRepository.findAllProductsByUserLogged(userId = user.id)
+        allProduct?.forEach { productSaved ->
+            deleteProduct(user = user, productId = productSaved.id)
+        }
+    }
+
+    @Transactional
     fun deleteProduct(
         user: User,
         productId: Long

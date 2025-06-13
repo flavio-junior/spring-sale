@@ -31,6 +31,11 @@ interface ProductRepository : JpaRepository<Product, Long> {
         pageable: Pageable
     ): Page<Product>?
 
+    @Query(value = "SELECT p FROM Product p WHERE p.user.id = :userId")
+    fun findAllProductsByUserLogged(
+        @Param(value = "userId") userId: Long? = null,
+    ): List<Product>?
+
     @Query(value = "SELECT p FROM Product p WHERE p.user.id = :userId AND p.id = :productId")
     fun findProductById(
         @Param(value = "userId") userId: Long? = null,

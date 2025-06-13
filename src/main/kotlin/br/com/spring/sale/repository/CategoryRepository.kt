@@ -31,6 +31,11 @@ interface CategoryRepository : JpaRepository<Category, Long?> {
         pageable: Pageable
     ): Page<Category>
 
+    @Query(value = "SELECT c FROM Category c WHERE c.user.id = :userId")
+    fun findAllCategoriesByUserLogged(
+        @Param(value = "userId") userId: Long? = null
+    ): List<Category>
+
     @Query(
         value = "SELECT c FROM Category c WHERE c.user.id = :userId AND LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))"
     )
