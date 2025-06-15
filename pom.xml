@@ -152,9 +152,9 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>${flyway.version}</version>
                 <configuration>
-                    <url>${env.FLYWAY_DB_URL_SPRING_SALE_TEST}</url>
-                    <user>${env.FLYWAY_DB_USER_SPRING_SALE_TEST}</user>
-                    <password>${env.FLYWAY_DB_PASSWORD_SPRING_SALE_TEST}</password>
+                    <url>jdbc:postgresql://localhost:5432/db_spring_sale</url>
+                    <user>postgres</user>
+                    <password>admin123</password>
                     <cleanDisabled>false</cleanDisabled>
                     <schemas>
                         <schema>public</schema>
