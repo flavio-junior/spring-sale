@@ -15,6 +15,10 @@
   - **` Git `**
   - **` GitHub `**
   - **` PostgreSQL `**
+  
+- **User Default:** 
+  - **E-mail: ` john.doe@example.com `**
+  - **Password: ` admin123 `**
 
 - **Contact Me:**
   - **Name: ` Flávio Júnior `**
